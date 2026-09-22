@@ -1,0 +1,26 @@
+/* The black curtain. Server-rendered opaque so nothing flashes before the intro starts. */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 30; /* below the header (40) so the logo can sit on top of it */
+  background: #000;
+  clip-path: inset(0 0 0 0);
+}
+
+.skip {
+  position: absolute;
+  right: var(--pad);
+  bottom: var(--pad);
+  padding: 0.6rem 0;
+  background: none;
+  border: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: rgb(245 245 243 / 0.45);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.skip:hover {
+  color: var(--slora-gold);
+}

@@ -1,0 +1,29 @@
+.link {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border: 1px solid var(--slora-gold);
+  border-radius: 50%;
+  color: var(--slora-ink);
+  background: var(--slora-gold);
+  transition: transform 0.3s ease;
+}
+.link:hover,
+.link:focus-visible {
+  transform: scale(1.08);
+}
+.link:focus-visible {
+  outline: 2px solid var(--slora-paper);
+  outline-offset: 3px;
+}
+.icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

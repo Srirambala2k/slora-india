@@ -1,0 +1,250 @@
+/* SLORA type & token specimen. Uses the plain :root tokens from app/globals.css. */
+
+.page {
+  --pad: clamp(1rem, 4vw, 3rem);
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--pad) 6rem;
+}
+
+.mono {
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgb(245 245 243 / 0.55);
+  font-weight: 400;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--slora-line);
+}
+
+.section {
+  padding-top: clamp(3rem, 8vw, 6rem);
+}
+
+.label {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 0.35rem 1.25rem;
+  margin-bottom: 1.75rem;
+}
+.labelN {
+  color: var(--slora-gold);
+}
+.labelTitle {
+  color: var(--slora-paper);
+}
+.labelNote {
+  grid-column: 2;
+  max-width: 62ch;
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  font-weight: 300;
+  color: rgb(245 245 243 / 0.62);
+}
+
+/* ── 01 hero ───────────────────────────────────────────────────────────── */
+.hero {
+  position: relative;
+  width: 100%; /* definite width: otherwise min-height + aspect-ratio widens the box on phones */
+  aspect-ratio: 16 / 9;
+  min-height: 24rem;
+  overflow: hidden;
+  background: #000;
+}
+.heroImg {
+  object-fit: cover;
+}
+.heroShade {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(16% 26% at 90.6% 83%, rgb(0 0 0 / 0.93) 20%, transparent 100%),
+    radial-gradient(120% 95% at 50% 42%, transparent 38%, rgb(0 0 0 / 0.72) 100%),
+    linear-gradient(90deg, rgb(0 0 0 / 0.78) 0%, rgb(0 0 0 / 0.3) 46%, transparent 72%);
+}
+.heroMetaTop,
+.heroMetaBottom {
+  position: absolute;
+  left: clamp(1rem, 3.5vw, 3rem);
+}
+.heroMetaTop {
+  top: clamp(1rem, 3vw, 2.25rem);
+  max-width: 90%;
+}
+.heroMetaBottom {
+  right: clamp(1rem, 3.5vw, 3rem);
+  left: auto;
+  bottom: clamp(1rem, 3vw, 2.25rem);
+}
+.heroType {
+  position: absolute;
+  left: clamp(1rem, 3.5vw, 3rem);
+  bottom: clamp(1.5rem, 6vw, 4.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.12em;
+}
+.heroHeavy {
+  font-family: var(--slora-font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(1.35rem, 4.4vw, 4.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+}
+.heroThin {
+  font-family: var(--slora-font-sans);
+  font-weight: 200;
+  font-size: clamp(2rem, 7vw, 7rem);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+}
+
+/* ── 02 display faces ──────────────────────────────────────────────────── */
+.faces {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 1px;
+  background: var(--slora-line);
+  border: 1px solid var(--slora-line);
+}
+.face {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: var(--slora-ink);
+}
+.faceTag {
+  color: var(--slora-gold);
+  margin: 0;
+}
+.faceWord {
+  margin: 0;
+  font-size: clamp(2.6rem, 5.6vw, 5rem);
+  line-height: 0.92;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.faceSample {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.35;
+  color: rgb(245 245 243 / 0.85);
+}
+.faceNote {
+  margin: auto 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  font-weight: 300;
+  color: rgb(245 245 243 / 0.6);
+}
+.faceA {
+  font-family: var(--slora-font-display);
+  font-weight: 900;
+}
+.faceB {
+  font-family: "Shrikhand", cursive;
+  font-weight: 400;
+}
+.faceC {
+  font-family: "Bagel Fat One", system-ui, sans-serif;
+  font-weight: 400;
+}
+.rule {
+  margin-top: 1.25rem;
+  max-width: 80ch;
+  line-height: 1.7;
+}
+
+/* ── 03 weight ladder ──────────────────────────────────────────────────── */
+.ladder {
+  display: grid;
+}
+.ladderRow {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--slora-line);
+}
+.ladderW {
+  width: 3.5rem;
+  flex: none;
+}
+.ladderWord {
+  font-family: var(--slora-font-sans);
+  font-size: clamp(2.2rem, 7vw, 6rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+/* ── 04 technical labels ───────────────────────────────────────────────── */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.chip {
+  font-family: var(--slora-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.6rem 0.95rem;
+  border: 1px solid var(--slora-line);
+  color: rgb(245 245 243 / 0.85);
+}
+.chipGold {
+  color: var(--slora-gold);
+  border-color: rgb(217 164 65 / 0.45);
+}
+
+/* ── 05 palette ────────────────────────────────────────────────────────── */
+.palette {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11.5rem, 1fr));
+  gap: 1.25rem;
+}
+.swatch {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.swatchChip {
+  height: 6.5rem;
+  border: 1px solid var(--slora-line);
+  margin-bottom: 0.4rem;
+}
+.swatchName {
+  color: var(--slora-paper);
+}
+.swatchHex {
+  color: var(--slora-gold);
+}
+.swatchRole {
+  font-size: 0.85rem;
+  line-height: 1.45;
+  font-weight: 300;
+  color: rgb(245 245 243 / 0.6);
+}
+
+.footer {
+  margin-top: 5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--slora-line);
+  max-width: 90ch;
+  line-height: 1.8;
+}

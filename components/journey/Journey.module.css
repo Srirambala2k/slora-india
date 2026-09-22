@@ -1,0 +1,307 @@
+/* The tall pinned section. Its height (set inline) is the length of the scroll journey. */
+.journey {
+  position: relative;
+  width: 100%;
+}
+
+/* What stays on screen while the journey scrolls by. */
+.stage,
+.simple {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 34rem;
+  overflow: hidden;
+  isolation: isolate;
+  background: #000;
+}
+.stage {
+  position: sticky;
+  top: 0;
+}
+
+/* Where "Surfaces" in the menu jumps to: the point where the descent begins. */
+.anchor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 8%;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+
+/* The descent: still frames painted onto a canvas (see lib/media/frameSequence.ts). */
+.scrub {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* Vignette + reading shade so the headline stays legible over bright footage. */
+.shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 100% at 50% 40%, transparent 42%, rgb(0 0 0 / 0.72) 100%),
+    linear-gradient(90deg, rgb(0 0 0 / 0.74) 0%, rgb(0 0 0 / 0.22) 46%, transparent 72%),
+    linear-gradient(0deg, rgb(0 0 0 / 0.7) 0%, transparent 38%);
+}
+.dim {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The 3D turf sits over the footage and fades in as the descent ends. */
+.turf {
+  position: absolute;
+  inset: 0;
+  background: #050505;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+/* softens the bright macro view so it matches the dark footage it fades in from */
+.turfShade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(90% 90% at 50% 50%, rgb(0 0 0 / 0.25), rgb(0 0 0 / 0.85));
+}
+.note {
+  position: absolute;
+  right: var(--pad);
+  bottom: clamp(1.25rem, 4svh, 2.25rem);
+  margin: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: rgb(245 245 243 / 0.5);
+  opacity: 0;
+}
+
+/* ── headline ──────────────────────────────────────────────────────────── */
+.headline {
+  position: absolute;
+  z-index: 5;
+  left: var(--pad);
+  bottom: clamp(5.5rem, 14svh, 9rem);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+}
+.heavy {
+  display: block;
+  font-family: var(--slora-font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(1.9rem, 5.2vw, 5.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.01em;
+}
+.thin {
+  display: block;
+  font-family: var(--slora-font-sans);
+  font-weight: 200;
+  font-size: clamp(2.7rem, 8.6vw, 9rem);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+}
+
+.taglineBox {
+  position: absolute;
+  z-index: 5;
+  left: var(--pad);
+  bottom: clamp(1.25rem, 3.5svh, 2.25rem);
+  max-width: 62%;
+}
+.tagline {
+  margin: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  line-height: 1.7;
+  color: rgb(245 245 243 / 0.6);
+}
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+/*
+ * Round scroll button. It is placed over the small ✦ mark baked into the stand-in
+ * footage (position set from Journey.tsx), which hides it for good and looks intentional.
+ */
+.cueBox {
+  position: absolute;
+  z-index: 5;
+  --size: var(--cue-size, 88px);
+  left: calc(var(--cue-x, 90%) - var(--size) / 2);
+  top: calc(var(--cue-y, 83%) - var(--size) / 2);
+  width: var(--size);
+  height: var(--size);
+}
+.cue {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  border: 1px solid rgb(217 164 65 / 0.6);
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.9);
+  font-family: var(--slora-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-indent: 0.22em;
+  color: var(--slora-gold);
+  text-decoration: none;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+.cue:hover {
+  background: var(--slora-gold);
+  color: var(--slora-ink);
+}
+/* progress ring around the button: fills as the camera descends */
+.ring {
+  position: absolute;
+  inset: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+.ringArc {
+  fill: none;
+  stroke: var(--slora-gold);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.cue span:last-child {
+  font-size: 14px;
+  line-height: 1;
+  text-indent: 0;
+}
+
+/* ── depth gauge (left) and brand statement, shown during the descent ──── */
+.gauge {
+  position: absolute;
+  z-index: 5;
+  left: var(--pad);
+  top: 24svh;
+  height: 50svh;
+  width: 9rem;
+  opacity: 0;
+  pointer-events: none;
+}
+.gauge::before {
+  /* a soft dark band behind the labels so they read over bright footage */
+  content: "";
+  position: absolute;
+  inset: -3rem -2rem -3rem -3rem;
+  z-index: -1;
+  background: radial-gradient(120% 60% at 0% 50%, rgb(0 0 0 / 0.55), transparent 70%);
+}
+.gaugeTrack {
+  position: absolute;
+  left: 3px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgb(245 245 243 / 0.45);
+}
+.gaugeMarker {
+  position: absolute;
+  left: -3px;
+  top: 0;
+  width: 7px;
+  height: 7px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: var(--slora-gold);
+  box-shadow: 0 0 0 5px rgb(217 164 65 / 0.2);
+}
+.gaugeLabel {
+  position: absolute;
+  left: 22px;
+  margin-top: -0.5em;
+  font-family: var(--slora-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: rgb(245 245 243 / 0.92);
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.9);
+  white-space: nowrap;
+}
+
+/* Shares the statement's slot (bottom-right, clear of the left-hand gauge column) — a
+   brief line between "the arena" and "the surface", gone again before the statement's turn. */
+.groundLine {
+  position: absolute;
+  z-index: 5;
+  right: var(--pad);
+  bottom: clamp(5rem, 16svh, 9rem);
+  max-width: min(30rem, 42vw);
+  opacity: 0;
+  pointer-events: none;
+}
+.groundLineText {
+  margin: 0;
+  font-family: var(--slora-font-sans);
+  font-weight: 200;
+  font-size: clamp(1.6rem, 3.6vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--slora-paper);
+  text-shadow: 0 2px 30px rgb(0 0 0 / 0.5);
+}
+
+.statement {
+  position: absolute;
+  z-index: 5;
+  right: var(--pad);
+  bottom: clamp(5rem, 16svh, 9rem);
+  max-width: min(34rem, 42vw);
+  opacity: 0;
+  pointer-events: none;
+}
+.eyebrow {
+  margin: 0 0 1rem;
+  font-family: var(--slora-font-display);
+  font-weight: 900;
+  font-size: clamp(0.9rem, 1.2vw, 1.15rem);
+  letter-spacing: 0.02em;
+  color: var(--slora-gold);
+}
+.statementText {
+  margin: 0;
+  font-family: var(--slora-font-sans);
+  font-weight: 200;
+  font-size: clamp(1.8rem, 3.2vw, 3.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--slora-paper);
+  text-shadow: 0 2px 30px rgb(0 0 0 / 0.5);
+}

@@ -1,0 +1,167 @@
+.section {
+  padding: clamp(5rem, 14svh, 9rem) var(--pad);
+  border-top: 1px solid var(--slora-line);
+}
+.eyebrow {
+  margin: 0 0 0.6rem;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--slora-gold);
+}
+.heading {
+  margin: 0 0 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05em;
+}
+.thin {
+  font-family: var(--slora-font-sans);
+  font-weight: 200;
+  font-size: clamp(2.6rem, 7vw, 6.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  text-transform: lowercase;
+}
+.heavy {
+  font-family: var(--slora-font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(2rem, 5.4vw, 5.2rem);
+  line-height: 0.98;
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 62rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px) {
+  .grid {
+    grid-template-columns: 1.3fr 1fr;
+  }
+}
+
+/* ── the address, styled like a small map ─────────────────────────────────────────────── */
+.mapCard {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  min-height: 16rem;
+  padding: 1.5rem;
+  border: 1px solid var(--slora-line);
+  background: #0a0d0a;
+  text-decoration: none;
+  color: inherit;
+}
+.mapGrid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(rgb(245 245 243 / 0.08) 1px, transparent 1px) 0 0 / 42px 42px,
+    linear-gradient(90deg, rgb(245 245 243 / 0.08) 1px, transparent 1px) 0 0 / 42px 42px;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mapCard:hover .mapGrid,
+.mapCard:focus-visible .mapGrid {
+  transform: scale(1.06);
+}
+.pin {
+  position: absolute;
+  top: 38%;
+  left: 46%;
+  width: 34px;
+  filter: drop-shadow(0 6px 10px rgb(0 0 0 / 0.5));
+}
+.pinIcon {
+  width: 100%;
+  fill: var(--slora-gold);
+}
+.pinDot {
+  fill: var(--slora-ink);
+}
+.address {
+  display: flex;
+  flex-direction: column;
+  font-style: normal;
+  font-family: var(--slora-font-sans);
+  font-size: 1.05rem;
+  line-height: 1.4;
+  color: var(--slora-paper);
+}
+.mapCta {
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--slora-gold);
+}
+.mapCard:focus-visible {
+  outline: 2px solid var(--slora-gold);
+  outline-offset: -4px;
+}
+
+/* ── the phone number and its two buttons ─────────────────────────────────────────────── */
+.phoneCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid var(--slora-line);
+  background: #050505;
+}
+.phoneLabel {
+  margin: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: rgb(245 245 243 / 0.5);
+}
+.phoneNumber {
+  margin: 0;
+  font-family: var(--slora-font-sans);
+  font-weight: 300;
+  font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+  letter-spacing: -0.01em;
+}
+.phoneActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+.phoneActions a {
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-decoration: none;
+  text-align: center;
+  transition:
+    transform 0.3s ease,
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+.whatsapp {
+  background: var(--slora-gold);
+  color: var(--slora-ink);
+}
+.call {
+  border: 1px solid var(--slora-gold);
+  background: rgb(217 164 65 / 0.14);
+  color: var(--slora-paper);
+}
+.phoneActions a:hover {
+  transform: translateY(-2px);
+}
+.phoneActions a:focus-visible {
+  outline: 2px solid var(--slora-gold);
+  outline-offset: 2px;
+}

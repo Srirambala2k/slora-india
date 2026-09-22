@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+/*
+ * SLORA design tokens (master prompt §3–4).
+ * Black / off-white / white are the base. Gold is an ACCENT only: active states,
+ * selected items, CTAs, key statistics, hairlines, metadata, hover states.
+ */
+/* Single source of truth: plain CSS variables (usable from Tailwind AND CSS modules). */
+:root {
+  color-scheme: dark;
+  --slora-ink: #000000;
+  --slora-paper: #f5f5f3;
+  --slora-gold: #d9a441;
+  --slora-surface: #0b0b0b;
+  --slora-line: rgb(245 245 243 / 0.12);
+  --pad: clamp(1rem, 4vw, 3rem); /* page side gutter */
+
+  --slora-font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --slora-font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+  /*
+   * Display face: a PLACEHOLDER (Unbounded, open licence) until SLORA decides on the
+   * licensed Mamenchisa or another face. This one variable is the only switch.
+   */
+  --slora-font-display: "Unbounded Variable", var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Expose them as Tailwind utilities: bg-ink, text-paper, text-gold, font-display … */
+@theme inline {
+  --color-ink: var(--slora-ink);
+  --color-paper: var(--slora-paper);
+  --color-gold: var(--slora-gold);
+  --color-surface: var(--slora-surface);
+  --color-line: var(--slora-line);
+  --font-sans: var(--slora-font-sans);
+  --font-mono: var(--slora-font-mono);
+  --font-display: var(--slora-font-display);
+}
+
+html {
+  background: var(--slora-ink);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--slora-ink);
+  color: var(--slora-paper);
+  font-family: var(--slora-font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--slora-gold);
+  color: var(--slora-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--slora-gold);
+  outline-offset: 3px;
+}
+
+/*
+ * Film grain (FX-12): one static tiled noise texture — cheap, no live shader.
+ * Echoes the black satin in the SLORA logo artwork.
+ */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Reduced motion (master prompt §41): stop transitions/animations site-wide. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* No scrolling while the opening sequence plays (set from lib/stage.ts). */
+html[data-stage="entering"],
+html[data-stage="revealing"] {
+  overflow: hidden;
+}

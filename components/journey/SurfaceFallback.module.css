@@ -1,0 +1,135 @@
+.section {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: clamp(5rem, 14svh, 8rem) var(--pad);
+  overflow: hidden;
+  border-top: 1px solid var(--slora-line);
+}
+
+/* macro grass, darkened right down so the layers stay the star */
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.image {
+  object-fit: cover;
+  opacity: 0.32;
+}
+.media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #000 0%, rgb(0 0 0 / 0.35) 45%, #000 100%);
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--slora-gold);
+}
+.title {
+  margin: 0 0 1rem;
+  font-family: var(--slora-font-sans);
+  font-weight: 200;
+  font-size: clamp(3rem, 9vw, 8rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+/* the drawn cross-section */
+.stack {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: min(100%, 44rem);
+  border: 1px solid var(--slora-line);
+}
+.band {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 1rem;
+}
+.bandLabel {
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: rgb(255 255 255 / 0.88);
+  text-shadow: 0 1px 6px rgb(0 0 0 / 0.6);
+}
+.bandLabel b {
+  margin-right: 0.8em;
+  font-weight: 400;
+  color: var(--slora-gold);
+}
+
+.fibres {
+  height: 7rem;
+  background:
+    repeating-linear-gradient(100deg, transparent 0 5px, rgb(255 255 255 / 0.07) 5px 6px),
+    linear-gradient(180deg, #4f8a35, #2b5a2a);
+}
+.infill {
+  height: 4.5rem;
+  background:
+    radial-gradient(rgb(0 0 0 / 0.2) 1px, transparent 1.3px) 0 0 / 7px 7px,
+    #a08b62;
+}
+.infill .bandLabel {
+  color: rgb(0 0 0 / 0.75);
+  text-shadow: none;
+}
+.infill .bandLabel b {
+  color: #5a4210;
+}
+.backing {
+  height: 1.6rem;
+  background:
+    linear-gradient(90deg, rgb(255 255 255 / 0.07) 1px, transparent 1px) 0 0 / 9px 100%,
+    #0d0d0d;
+}
+.base {
+  height: 6rem;
+  background:
+    radial-gradient(rgb(255 255 255 / 0.2) 2px, transparent 2.5px) 0 0 / 11px 11px,
+    radial-gradient(rgb(0 0 0 / 0.25) 2.5px, transparent 3px) 5px 6px / 13px 13px,
+    #76766e;
+}
+.drainage {
+  height: 5rem;
+  background:
+    radial-gradient(
+      circle at 22% 50%,
+      #050606 0 1.05rem,
+      #2b2d2d 1.05rem 1.4rem,
+      transparent 1.45rem
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      #050606 0 1.05rem,
+      #2b2d2d 1.05rem 1.4rem,
+      transparent 1.45rem
+    ),
+    radial-gradient(
+      circle at 78% 50%,
+      #050606 0 1.05rem,
+      #2b2d2d 1.05rem 1.4rem,
+      transparent 1.45rem
+    ),
+    #474b4b;
+}
+
+.note {
+  margin: 0.25rem 0 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: rgb(245 245 243 / 0.45);
+}

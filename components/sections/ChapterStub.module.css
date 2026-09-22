@@ -1,0 +1,31 @@
+.stub {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 60svh;
+  padding: 6rem var(--pad);
+  border-top: 1px solid var(--slora-line);
+}
+.n {
+  margin: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--slora-gold);
+}
+.word {
+  margin: 0;
+  font-family: var(--slora-font-sans);
+  font-weight: 200;
+  font-size: clamp(3rem, 11vw, 10rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+.note {
+  margin: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: rgb(245 245 243 / 0.4);
+}

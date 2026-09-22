@@ -1,0 +1,38 @@
+/* Cross-section labels, positioned in 3D by drei's <Html> and revealed by scroll. */
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  white-space: nowrap;
+  will-change: opacity, transform;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--slora-gold);
+  box-shadow: 0 0 0 4px rgb(217 164 65 / 0.18);
+  flex: none;
+}
+
+.leader {
+  width: clamp(28px, 5vw, 84px);
+  height: 1px;
+  background: linear-gradient(90deg, var(--slora-gold), rgb(217 164 65 / 0.35));
+  flex: none;
+}
+
+.name {
+  font-family: var(--slora-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: var(--slora-paper);
+}
+
+.name b {
+  margin-right: 0.8em;
+  font-weight: 400;
+  color: var(--slora-gold);
+  opacity: 0.85;
+}

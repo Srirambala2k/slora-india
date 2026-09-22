@@ -1,0 +1,481 @@
+/* Editorial surface card. Uses the plain :root tokens from app/globals.css. */
+
+.mono {
+  margin: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgb(245 245 243 / 0.55);
+  font-weight: 400;
+}
+
+.card {
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --cpad: clamp(1rem, 3vw, 2.25rem);
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+  width: 100%;
+  isolation: isolate;
+  overflow: hidden;
+  aspect-ratio: 16 / 9.5;
+  min-height: 25rem;
+  max-height: 34rem;
+  background: #050505;
+  border: 1px solid var(--slora-line);
+}
+
+/* FX-03: a gold edge light that follows the pointer, plus a soft spotlight inside */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  padding: 1px;
+  background: radial-gradient(
+    260px circle at var(--mx) var(--my),
+    rgb(217 164 65 / 0.85),
+    transparent 62%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.spot {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: radial-gradient(
+    420px circle at var(--mx) var(--my),
+    rgb(245 245 243 / 0.07),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+/* Depth movement (JS sets --px/--py) uses the separate `translate` property, so it never
+   fights the hover `transform`s below. */
+.media,
+.word,
+.shadow,
+.slab {
+  translate: calc(var(--px, 0) * 1px) calc(var(--py, 0) * 1px);
+}
+.media {
+  position: absolute;
+  inset: -3%; /* a little spare picture, so the depth movement never shows an edge */
+  transform: scale(1.02);
+  transition: transform 0.9s var(--ease);
+}
+.mediaIn {
+  position: absolute;
+  inset: 0;
+}
+.image {
+  object-fit: cover;
+  opacity: 0.55;
+}
+/* the football card's looping background video, dimmed the same way the still images are */
+.video :global(img),
+.video :global(video) {
+  opacity: 0.55;
+}
+.dot {
+  z-index: 2;
+  border: 1px solid rgb(217 164 65 / 0.55);
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.92);
+}
+.dot::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: var(--slora-gold);
+}
+.wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgb(0 0 0 / 0.6) 0%,
+    rgb(0 0 0 / 0.1) 42%,
+    rgb(0 0 0 / 0.88) 100%
+  );
+}
+
+.index,
+.spec,
+.area {
+  position: absolute;
+  z-index: 4;
+}
+.index {
+  top: var(--cpad);
+  left: var(--cpad);
+  color: var(--slora-gold);
+}
+.spec {
+  top: var(--cpad);
+  right: var(--cpad);
+}
+.area {
+  right: var(--cpad);
+  bottom: var(--cpad);
+}
+
+/* the giant word, cropped by the left edge like the reference specimen */
+.word {
+  position: absolute;
+  z-index: 1;
+  left: -1.6%;
+  top: 7%;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--slora-font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  /* --wordscale (set per card) shrinks longer words such as SHUTTLE so they still fit */
+  font-size: calc(clamp(3.6rem, 12vw, 10.5rem) * var(--wordscale, 1));
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  color: var(--slora-paper);
+  white-space: nowrap;
+  pointer-events: none;
+  transition: transform 0.9s var(--ease);
+}
+
+/* the object laid across the type, and the shadow it drops onto the letters */
+.shadow,
+.slab {
+  position: absolute;
+  right: 2%;
+  top: 21%;
+  width: 43%;
+  aspect-ratio: 1.85 / 1;
+  border-radius: 16px;
+  transition: transform 0.9s var(--ease);
+}
+.shadow {
+  z-index: 2;
+  background: rgb(0 0 0 / 0.85);
+  filter: blur(24px);
+  mix-blend-mode: multiply;
+  transform: translate(-4%, 11%) rotate(-22deg);
+}
+.slab {
+  z-index: 3;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 46% 30% 24%;
+  transform: rotate(-22deg);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.2),
+    0 30px 60px -18px rgb(0 0 0 / 0.75);
+}
+.slab::after {
+  /* the logo's gold bar, as a hairline along the bottom edge */
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 3px;
+  background: var(--slora-gold);
+}
+.slab i {
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--slora-font-mono);
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: rgb(255 255 255 / 0.78);
+}
+.fibre,
+.infill,
+.backing {
+  position: relative;
+  display: block;
+}
+.fibre {
+  background:
+    repeating-linear-gradient(100deg, transparent 0 5px, rgb(255 255 255 / 0.07) 5px 6px),
+    linear-gradient(180deg, #3f8a4d, #2b6a38);
+}
+.infill {
+  background:
+    radial-gradient(rgb(0 0 0 / 0.2) 1px, transparent 1.3px) 0 0 / 7px 7px,
+    #b39567;
+}
+.infill i {
+  color: rgb(0 0 0 / 0.65);
+}
+.backing {
+  background:
+    linear-gradient(90deg, rgb(255 255 255 / 0.07) 1px, transparent 1px) 0 0 / 9px 100%,
+    #0d0d0d;
+}
+
+/* A court card's slab: one tinted playing surface with its lines, no layer names. */
+.slab:has(.court) {
+  grid-template-rows: 1fr;
+}
+.court {
+  position: relative;
+  display: block;
+  background:
+    linear-gradient(rgb(255 255 255 / 0.85), rgb(255 255 255 / 0.85)) 50% 0 / 2px 100% no-repeat,
+    radial-gradient(
+      circle at 50% 50%,
+      transparent 0 17%,
+      rgb(255 255 255 / 0.85) 17% calc(17% + 2px),
+      transparent calc(17% + 2px)
+    ),
+    linear-gradient(180deg, var(--court-a), var(--court-b));
+}
+.court::before {
+  /* the boundary line, set in from the edge */
+  content: "";
+  position: absolute;
+  inset: 9%;
+  border: 2px solid rgb(255 255 255 / 0.85);
+}
+.courtBlue {
+  --court-a: #2f63a3;
+  --court-b: #1e4576;
+}
+.courtTeal {
+  --court-a: #1f7a68;
+  --court-b: #155245;
+}
+.courtClay {
+  --court-a: #b4552f;
+  --court-b: #85391d;
+}
+
+.body {
+  position: absolute;
+  /* above .link (z-index 8) so .connect can be clicked, but click-through everywhere else
+     (the same technique as the header, Header.module.css) so the whole-card link still works
+     over the plain text here */
+  z-index: 9;
+  pointer-events: none;
+  left: var(--cpad);
+  bottom: var(--cpad);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  max-width: 46%;
+}
+.thin {
+  margin: 0;
+  font-family: var(--slora-font-sans);
+  font-weight: 200;
+  font-size: clamp(1.6rem, 3.2vw, 3rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.rule {
+  display: block;
+  width: 6rem;
+  height: 1px;
+  background: var(--slora-gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.7s var(--ease) 0.12s;
+}
+.info {
+  opacity: 0;
+  clip-path: inset(100% 0 0 0);
+  transition:
+    clip-path 0.7s var(--ease) 0.2s,
+    opacity 0.5s ease 0.2s;
+}
+.cta {
+  color: var(--slora-gold);
+  opacity: 0;
+  transform: translateX(-0.75rem);
+  transition:
+    opacity 0.5s ease 0.32s,
+    transform 0.7s var(--ease) 0.32s;
+}
+
+/* a real button, always visible (not tied to the hover reveal above it — touch and keyboard
+   visitors must be able to find it without hovering), so it sits above the whole-card link */
+.connect {
+  position: relative;
+  pointer-events: auto;
+  align-self: flex-start;
+  margin-top: 0.2rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 999px;
+  background: var(--slora-gold);
+  color: var(--slora-ink);
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.connect:hover {
+  transform: translateY(-2px);
+}
+.connect:focus-visible {
+  outline: 2px solid var(--slora-paper);
+  outline-offset: 2px;
+}
+
+/* the whole card is one link */
+.link {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+}
+.link:focus-visible {
+  outline: 2px solid var(--slora-gold);
+  outline-offset: -4px;
+}
+
+/* FX-08: the cursor label (only for a real mouse; JS moves the point, CSS shows the bubble) */
+.cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 7;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.bubble {
+  position: absolute;
+  left: -44px;
+  top: -44px;
+  display: none;
+  width: 88px;
+  height: 88px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(217 164 65 / 0.7);
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.82);
+  color: var(--slora-gold);
+  font-size: 10px;
+  text-indent: 0.22em;
+  opacity: 0;
+  transform: scale(0.4);
+  transition:
+    opacity 0.3s ease,
+    transform 0.4s var(--ease);
+}
+
+/* Hover and keyboard focus reveal the card in the order the brief asks for. */
+@media (hover: hover) {
+  .card:hover .media,
+  .card:focus-within .media {
+    transform: scale(1.09);
+  }
+  .card:hover .word,
+  .card:focus-within .word {
+    transform: translateX(-2.2%);
+  }
+  .card:hover .slab,
+  .card:focus-within .slab {
+    transform: translateY(-3%) rotate(-18deg);
+  }
+  .card:hover .shadow,
+  .card:focus-within .shadow {
+    transform: translate(-1%, 8%) rotate(-18deg);
+  }
+  .card:hover .rule,
+  .card:focus-within .rule {
+    transform: scaleX(1);
+  }
+  .card:hover .info,
+  .card:focus-within .info {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+  .card:hover .cta,
+  .card:focus-within .cta {
+    opacity: 1;
+    transform: none;
+  }
+  .card:hover::after,
+  .card:hover .spot {
+    opacity: 1;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .live,
+  .live .link {
+    cursor: none;
+  }
+  .live .bubble {
+    display: flex;
+    opacity: 1;
+    transform: scale(1);
+  }
+  .live .cta {
+    /* the cursor label already says EXPLORE */
+    opacity: 0.5;
+  }
+}
+
+/* Touch has no hover, so show the resolved state. */
+@media (hover: none) {
+  .rule {
+    transform: scaleX(1);
+  }
+  .info {
+    opacity: 1;
+    clip-path: none;
+  }
+  .cta {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .card {
+    aspect-ratio: auto;
+    min-height: 30rem;
+    max-height: none;
+  }
+  .word {
+    top: 8%;
+    font-size: calc(27vw * var(--wordscale-narrow, 1));
+  }
+  .shadow,
+  .slab {
+    width: 78%;
+    right: -14%;
+    top: 40%;
+  }
+  /* the slab hangs off the right edge here, so its tags move to the end that is on screen */
+  .slab i {
+    right: auto;
+    left: 1.1rem;
+  }
+  .body {
+    max-width: 70%;
+  }
+  .area {
+    display: none;
+  }
+}

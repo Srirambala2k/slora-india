@@ -1,0 +1,13 @@
+node_modules
+.next
+.data
+coverage
+playwright-report
+test-results
+public
+video
+photo
+package-lock.json
+master_prompt.md
+IMPLEMENTATION_PLAN.md
+AGENTS.md

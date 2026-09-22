@@ -1,0 +1,78 @@
+.root {
+  position: relative;
+  display: inline-block;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid var(--slora-gold);
+  border-radius: 999px;
+  background: var(--slora-gold);
+  color: var(--slora-ink);
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.trigger:hover,
+.trigger[aria-expanded="true"] {
+  transform: translateY(-2px);
+}
+.trigger:focus-visible {
+  outline: 2px solid var(--slora-paper);
+  outline-offset: 3px;
+}
+
+.menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 0.6rem);
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 13rem;
+  overflow: hidden;
+  border: 1px solid var(--slora-line);
+  border-radius: 10px;
+  background: rgb(5 5 5 / 0.96);
+  box-shadow: 0 20px 45px -20px rgb(0 0 0 / 0.8);
+}
+.menu.up {
+  top: auto;
+  bottom: calc(100% + 0.6rem);
+}
+
+@media (max-width: 480px) {
+  .trigger {
+    padding: 0.5rem 0.85rem;
+    font-size: 10px;
+  }
+  .menu {
+    min-width: min(13rem, 78vw);
+  }
+}
+.menu a {
+  padding: 0.85rem 1.1rem;
+  color: var(--slora-paper);
+  font-family: var(--slora-font-sans);
+  font-size: 0.9rem;
+  text-decoration: none;
+  border-bottom: 1px solid var(--slora-line);
+  transition: background-color 0.2s ease;
+}
+.menu a:last-child {
+  border-bottom: none;
+}
+.menu a:hover,
+.menu a:focus-visible {
+  background: rgb(217 164 65 / 0.14);
+  color: var(--slora-gold);
+}
+.menu a:focus-visible {
+  outline: 2px solid var(--slora-gold);
+  outline-offset: -2px;
+}

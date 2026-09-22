@@ -1,0 +1,22 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: clamp(5rem, 14svh, 9rem) var(--pad);
+  border-top: 1px solid var(--slora-line);
+}
+.eyebrow {
+  margin: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--slora-gold);
+}
+.title {
+  margin: 0 0 1.5rem;
+  font-family: var(--slora-font-sans);
+  font-weight: 200;
+  font-size: clamp(2.6rem, 8vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}

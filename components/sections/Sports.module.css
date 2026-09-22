@@ -1,0 +1,367 @@
+/* SPORTS: a pinned sideways rail on desktop, a swipe row everywhere else. */
+
+.tall,
+.swipe {
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  width: 100%;
+  border-top: 1px solid var(--slora-line);
+}
+
+/* ── shared: heading row, counter row ───────────────────────────────────────────────────── */
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  padding: 0 var(--pad);
+}
+.eyebrow {
+  margin: 0 0 0.6rem;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--slora-gold);
+}
+.title {
+  margin: 0;
+  font-family: var(--slora-font-sans);
+  font-weight: 200;
+  font-size: clamp(2rem, 5.2vw, 4.6rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+.note {
+  margin: 0;
+  max-width: 24rem;
+  font-family: var(--slora-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: rgb(245 245 243 / 0.4);
+}
+
+.meter {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0 var(--pad);
+}
+.count {
+  flex: none;
+  margin: 0;
+  min-width: 11.5rem;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: rgb(245 245 243 / 0.55);
+}
+.count b {
+  font-weight: 400;
+  color: var(--slora-gold);
+}
+.hair {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: var(--slora-line);
+}
+.fill {
+  position: absolute;
+  inset: 0;
+  background: var(--slora-gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+/* ── desktop: tall section, sticky stage, the row slides sideways ───────────────────────── */
+.tall {
+  --pw: min(64vw, 62rem);
+  height: 420svh; /* replaced by the measured height as soon as the script runs */
+}
+.tall .stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 34rem;
+  padding: 6rem 0 1.5rem;
+  overflow: clip; /* clip, not hidden: focus can never scroll the stage sideways */
+  isolation: isolate;
+  background: #000;
+}
+.tall .rail {
+  flex: 1;
+  min-height: 0;
+  overflow: clip;
+}
+.tall .track {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  height: 100%;
+  margin: 0;
+  padding: 0 var(--pad);
+  list-style: none;
+  will-change: transform;
+}
+.tall .panel {
+  flex: 0 0 var(--pw);
+}
+.tall .meter {
+  padding-right: 5.5rem; /* keeps the progress line clear of the chat button */
+}
+.tall .arrows {
+  display: none;
+}
+
+/* ── everywhere else: a row you swipe (native scroll-snap) ──────────────────────────────── */
+.swipe {
+  --pw: min(84vw, 26rem);
+  padding: clamp(4rem, 10svh, 6rem) 0;
+}
+.swipe .rail {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--pad);
+  scrollbar-width: none;
+}
+.swipe .rail::-webkit-scrollbar {
+  display: none;
+}
+.swipe .track {
+  display: flex;
+  gap: 1rem;
+  width: max-content;
+  margin: 0;
+  padding: 0 var(--pad);
+  list-style: none;
+}
+.swipe .panel {
+  flex: 0 0 var(--pw);
+  aspect-ratio: 4 / 5;
+  scroll-snap-align: start;
+}
+@media (min-width: 900px) {
+  .swipe {
+    --pw: min(52vw, 40rem);
+  }
+  .swipe .panel {
+    aspect-ratio: 5 / 4;
+  }
+}
+
+.arrows {
+  display: flex;
+  flex: none;
+  gap: 0.6rem;
+}
+.arrow {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgb(217 164 65 / 0.7);
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.82);
+  color: var(--slora-gold);
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    opacity 0.3s ease;
+}
+.arrow:hover:not(:disabled) {
+  background: var(--slora-gold);
+  color: #000;
+}
+.arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.arrow:focus-visible {
+  outline: 2px solid var(--slora-paper);
+  outline-offset: 3px;
+}
+.icon {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── one panel ──────────────────────────────────────────────────────────────────────────── */
+.panel {
+  --cpad: clamp(1rem, 2.4vw, 2rem);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-width: 0;
+  background: #050505;
+  border: 1px solid var(--slora-line);
+}
+.media {
+  position: absolute;
+  inset: 0;
+  transform: scale(1.02);
+  transition: transform 0.9s var(--ease);
+}
+.mediaIn {
+  position: absolute;
+  inset: 0 -8%; /* spare picture on each side, so the depth drift never shows an edge */
+}
+.image {
+  object-fit: cover;
+  opacity: 0.55;
+}
+.wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgb(0 0 0 / 0.6) 0%,
+    rgb(0 0 0 / 0.12) 42%,
+    rgb(0 0 0 / 0.9) 100%
+  );
+}
+.index {
+  position: absolute;
+  z-index: 3;
+  top: var(--cpad);
+  left: var(--cpad);
+  margin: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--slora-gold);
+}
+
+/* the giant word: sized from the panel's width and the longest line, and capped by height */
+.word {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--cpad) + 1.6rem);
+  left: var(--cpad);
+  right: var(--cpad);
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-family: var(--slora-font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: min(calc(var(--pw) * 0.92 / max(var(--len), 4.2)), calc(var(--cap) * 1svh));
+  line-height: 0.82;
+  letter-spacing: -0.04em;
+  color: var(--slora-paper);
+  white-space: nowrap;
+  transition: transform 0.9s var(--ease);
+}
+
+.body {
+  position: absolute;
+  z-index: 3;
+  left: var(--cpad);
+  right: var(--cpad);
+  bottom: var(--cpad);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+.line {
+  margin: 0;
+  font-family: var(--slora-font-sans);
+  font-weight: 200;
+  font-size: clamp(1.3rem, 2.4vw, 2.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.rule {
+  display: block;
+  width: 5rem;
+  height: 1px;
+  background: var(--slora-gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.7s var(--ease) 0.1s;
+}
+.fact {
+  margin: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(245 245 243 / 0.6);
+}
+.cta {
+  padding: 0.35rem 0;
+  border: 0;
+  background: none;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--slora-gold);
+  cursor: pointer;
+  transition: transform 0.6s var(--ease);
+}
+.cta:hover {
+  transform: translateX(6px);
+}
+.cta:focus-visible {
+  outline: 2px solid var(--slora-gold);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) {
+  .panel:hover .media,
+  .panel:focus-within .media {
+    transform: scale(1.07);
+  }
+  .panel:hover .word,
+  .panel:focus-within .word {
+    transform: translateX(-1.5%);
+  }
+  .panel:hover .rule,
+  .panel:focus-within .rule {
+    transform: scaleX(1);
+  }
+}
+/* touch has no hover, so show the resolved state */
+@media (hover: none) {
+  .rule {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media,
+  .word,
+  .rule,
+  .cta,
+  .arrow {
+    transition: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .count {
+    min-width: 0;
+  }
+  .word {
+    font-size: min(calc(var(--pw) * 0.92 / max(var(--len), 4.2)), calc(var(--cap) * 0.7svh));
+  }
+}

@@ -1,0 +1,194 @@
+.header {
+  --brand-w: clamp(92px, 8.4vw, 128px);
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: clamp(0.9rem, 2vw, 1.4rem) var(--pad);
+  /* Solid, not glass (glassmorphism is reserved for How We Build + the chat, master prompt
+     P§11/22): a translucent header let whatever was scrolling behind it show through and blend
+     with the menu text, especially over busy footage. Plain black stays legible always. */
+  background: var(--slora-ink);
+  border-bottom: 1px solid var(--slora-line);
+  pointer-events: none; /* only the real controls catch clicks */
+}
+.header > *,
+.nav a,
+.actions > * {
+  pointer-events: auto;
+}
+
+/* ── desktop nav ───────────────────────────────────────────────────────── */
+.nav ul {
+  display: flex;
+  gap: clamp(0.9rem, 1.8vw, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.link,
+.contact {
+  position: relative;
+  display: inline-block;
+  padding: 0.45rem 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: rgb(245 245 243 / 0.72);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.num {
+  margin-right: 0.55em;
+  color: var(--slora-gold);
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--slora-gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.link:hover,
+.link[aria-current="true"],
+.contact:hover {
+  color: var(--slora-paper);
+}
+.link:hover .num,
+.link[aria-current="true"] .num {
+  opacity: 1;
+}
+.link:hover::after,
+.link[aria-current="true"]::after {
+  transform: scaleX(1);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.9rem, 1.6vw, 1.75rem);
+}
+.cta {
+  display: inline-block;
+  padding: 0.7rem 1.05rem;
+  border: 1px solid var(--slora-gold);
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--slora-ink);
+  text-decoration: none;
+  white-space: nowrap;
+  background: var(--slora-gold);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.cta:hover {
+  transform: translateY(-2px);
+}
+
+.menuButton {
+  display: none;
+  padding: 0.7rem 0;
+  background: none;
+  border: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--slora-paper);
+  cursor: pointer;
+}
+
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--slora-gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+/* ── tablet / phone ────────────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .nav,
+  .contact {
+    display: none;
+  }
+  .menuButton {
+    display: block;
+  }
+}
+@media (max-width: 520px) {
+  .cta {
+    display: none;
+  }
+}
+
+.menu {
+  position: fixed;
+  inset: 0;
+  z-index: -1; /* sits behind the header row (logo + CLOSE stay visible) */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 6rem var(--pad) 3rem;
+  background: #000;
+  pointer-events: auto;
+  animation: menuIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.menu ul {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.menu a {
+  display: block;
+  font-family: var(--slora-font-display);
+  font-weight: 900;
+  font-size: clamp(1.7rem, 8vw, 2.6rem);
+  letter-spacing: -0.01em;
+  color: var(--slora-paper);
+  text-decoration: none;
+}
+.menuNum {
+  margin-right: 0.9rem;
+  font-family: var(--slora-font-mono);
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--slora-gold);
+  vertical-align: middle;
+}
+.menuCta {
+  background: transparent;
+  cursor: pointer;
+  align-self: flex-start;
+  padding: 0.9rem 1.2rem;
+  border: 1px solid rgb(217 164 65 / 0.55);
+  font-family: var(--slora-font-mono);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: var(--slora-gold);
+}
+@keyframes menuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}

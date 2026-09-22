@@ -1,0 +1,217 @@
+/* The surface-card deck: arrows over the card edges, a row of names underneath. */
+
+.carousel {
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  width: 100%;
+  max-width: 1400px;
+}
+
+.stage {
+  position: relative;
+}
+
+/* Sideways swipes belong to the deck; vertical ones still scroll the page. */
+.viewport {
+  overflow: hidden;
+  touch-action: pan-y;
+}
+.track {
+  display: flex;
+  width: 100%;
+  will-change: transform;
+}
+.slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+/* ── the arrows ─────────────────────────────────────────────────────────────────────────── */
+/* (a little below the middle: that keeps them clear of the tilted slab's corner) */
+.arrow {
+  position: absolute;
+  top: 63%;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-top: -32px;
+  padding: 0;
+  border: 1px solid var(--slora-gold);
+  border-radius: 50%;
+  background: var(--slora-gold);
+  color: #000;
+  cursor: pointer;
+  transition:
+    opacity 0.35s ease,
+    transform 0.6s var(--ease);
+}
+.next {
+  right: clamp(0.6rem, 2vw, 1.4rem);
+}
+.prev {
+  left: clamp(0.6rem, 2vw, 1.4rem);
+}
+.next:hover {
+  transform: translateX(4px);
+}
+.prev:hover {
+  transform: translateX(-4px);
+}
+.arrow:focus-visible {
+  outline: 2px solid var(--slora-paper);
+  outline-offset: 3px;
+}
+.arrow:disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* how far through the deck you are, as a ring around the arrow */
+.ring {
+  position: absolute;
+  inset: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+.ringArc {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.85;
+  transition: stroke-dashoffset 0.9s var(--ease);
+}
+
+/* ── the names underneath ───────────────────────────────────────────────────────────────── */
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+}
+.pips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pip {
+  position: relative;
+  display: flex;
+  gap: 0.7rem;
+  padding: 0.7rem 0 0.2rem;
+  border: 0;
+  background: none;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgb(245 245 243 / 0.45);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+.pip::before {
+  /* a hairline above each name; the current one fills with gold */
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: var(--slora-line);
+}
+.pip::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: var(--slora-gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.7s var(--ease);
+}
+.pip:hover {
+  color: rgb(245 245 243 / 0.85);
+}
+.pip[aria-current="true"] {
+  color: var(--slora-gold);
+}
+.pip[aria-current="true"]::after {
+  transform: scaleX(1);
+}
+.pip:focus-visible {
+  outline: 2px solid var(--slora-gold);
+  outline-offset: 4px;
+}
+.pipN {
+  color: inherit;
+  opacity: 0.7;
+}
+
+.note {
+  margin: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(245 245 243 / 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrow,
+  .ringArc,
+  .pip::after {
+    transition: none;
+  }
+}
+
+@media (max-width: 640px) {
+  /* on a phone the tall card has its free corner at the bottom right: both arrows sit there */
+  .arrow {
+    top: auto;
+    bottom: 1rem;
+    width: 48px;
+    height: 48px;
+    margin-top: 0;
+  }
+  .next {
+    right: 0.75rem;
+  }
+  .prev {
+    left: auto;
+    right: calc(0.75rem + 48px + 0.6rem);
+  }
+  .next:hover,
+  .prev:hover {
+    transform: none;
+  }
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+  /* on a phone only the current name is spelled out; the others are just their numbers */
+  .pips {
+    gap: 0.25rem 1.1rem;
+  }
+  .pip:not([aria-current="true"]) .pipName {
+    display: none;
+  }
+}
