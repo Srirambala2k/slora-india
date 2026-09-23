@@ -301,19 +301,24 @@ function Labels({ refs }: { refs: MutableRefObject<Array<HTMLDivElement | null>>
           zIndexRange={[20, 0]}
           style={{ pointerEvents: "none" }}
         >
-          <div
-            ref={(el) => {
-              refs.current[i] = el;
-            }}
-            className={styles.label}
-            style={{ opacity: 0 }}
-          >
-            <span className={styles.dot} />
-            <span className={styles.leader} />
-            <span className={styles.name}>
-              <b>{layer.n}</b>
-              {layer.label}
-            </span>
+          {/* Wrapper so a phone can shift the label back onto the screen in pure CSS: `Rig`
+              sets `transform`/`opacity` on the inner div every frame (inline style, so it would
+              silently win over any CSS `transform` placed on that same element). */}
+          <div className={styles.labelWrap}>
+            <div
+              ref={(el) => {
+                refs.current[i] = el;
+              }}
+              className={styles.label}
+              style={{ opacity: 0 }}
+            >
+              <span className={styles.dot} />
+              <span className={styles.leader} />
+              <span className={styles.name}>
+                <b>{layer.n}</b>
+                {layer.label}
+              </span>
+            </div>
           </div>
         </Html>
       ))}

@@ -72,7 +72,16 @@ export function cuePosition(
     y >= radius + margin &&
     x <= width - radius - margin &&
     y <= height - radius - margin;
-  return onScreen
-    ? { x, y, radius, overMark: true }
-    : { x: width - maxRadius - 16, y: height - maxRadius - 96, radius: maxRadius, overMark: false };
+  if (onScreen) return { x, y, radius, overMark: true };
+
+  // Off screen (a narrow, tall phone crops the mark away entirely): there is nothing left to
+  // hide, so this is just an ordinary corner button — sized to the SCREEN, not to `maxRadius`
+  // (a desktop-appropriate cap that would otherwise make it as wide as a small phone screen).
+  const fallbackRadius = Math.min(maxRadius, Math.max(32, Math.min(width, height) * 0.11));
+  return {
+    x: width - fallbackRadius - 16,
+    y: height - fallbackRadius - 96,
+    radius: fallbackRadius,
+    overMark: false,
+  };
 }

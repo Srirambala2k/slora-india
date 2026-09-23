@@ -86,6 +86,20 @@ describe("watermark position (where the round SCROLL button must sit)", () => {
       expect(cue.y).toBeLessThan(h);
     }
   });
+
+  it("the fallback button is sized to the phone screen, not to the (desktop-sized) maxRadius — it was once 90 px on a 390 px-wide phone, wide enough to sit over the headline", () => {
+    for (const [w, h] of [
+      [390, 844],
+      [360, 640],
+      [320, 568],
+    ] as const) {
+      const cue = cuePosition(w, h);
+      expect(cue.overMark).toBe(false);
+      // well under half the screen's narrower side (it was 90 px — nearly half of 390 px wide)
+      expect(cue.radius).toBeLessThan(Math.min(w, h) * 0.15);
+      expect(cue.radius).toBeGreaterThanOrEqual(32); // still a comfortably tappable target
+    }
+  });
 });
 
 describe("stage store (entrance → menu → hero coordination)", () => {

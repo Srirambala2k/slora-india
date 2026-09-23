@@ -95,13 +95,10 @@ test.describe("home: entrance → header → hero", () => {
 });
 
 test.describe("home: the scroll journey", () => {
-  test("desktop: the hero pins into a tall journey that ends on the 3D cross-section", async ({
-    page,
-    isMobile,
-  }) => {
-    test.skip(isMobile, "phones get the lightweight version (later test)");
+  test("the hero pins into a tall journey that ends on the 3D cross-section", async ({ page }) => {
     // ?journey=full forces the 3D tier: test machines draw WebGL in software, which the site
-    // would (rightly) treat as "no graphics card" and skip the 3D
+    // would (rightly) treat as "no graphics card" and skip the 3D. On a phone screen too,
+    // since 2026-09-23 — the device's own graphics card decides this, never screen width.
     await page.goto("/?journey=full");
     await waitForReady(page);
 
@@ -141,10 +138,10 @@ test.describe("home: the scroll journey", () => {
 
   test("a computer WITHOUT a graphics card gets the smooth video-only journey, no 3D, then a drawn version of the layers", async ({
     page,
-    isMobile,
   }) => {
-    test.skip(isMobile, "phones get the light version (next test)");
-    // (test machines draw WebGL in software, so this is also what visitors on such machines get)
+    // (test machines draw WebGL in software, so this is also what visitors on such machines get
+    // — on phones too, since 2026-09-23 the journey is decided by the device's own graphics
+    // card, never by screen width: see "the 3D tier" tests further down)
     await page.goto("/?journey=video");
     await waitForReady(page);
 
@@ -172,7 +169,6 @@ test.describe("home: the scroll journey", () => {
     page,
     isMobile,
   }) => {
-    test.skip(isMobile, "the pinned descent is desktop only");
     await page.goto("/?journey=video");
     await waitForReady(page);
 
@@ -180,7 +176,9 @@ test.describe("home: the scroll journey", () => {
     // seeks a video (the football surface card further down the page has its own separate
     // looping video — "Connect with us" work — so this is scoped to `#top`, not the page).
     await expect(page.locator("#top video")).toHaveCount(1);
-    await expect(page.locator("canvas[data-frames]")).toHaveCount(2); // the descent and How We Build
+    // How We Build keeps its own, separate desktop-only pinned mode (untouched by the journey
+    // now reaching phones), so a phone gets only the journey's own frame-sequence canvas.
+    await expect(page.locator("canvas[data-frames]")).toHaveCount(isMobile ? 1 : 2);
 
     /** A 16 × 9 thumbnail of what the descent canvas is showing, as plain numbers. */
     const thumbnail = () =>
@@ -315,22 +313,46 @@ test.describe("home: the scroll journey", () => {
     ).toBe(0);
   });
 
-  test("the 3D tier is never offered on a phone, whatever the address says", async ({
+  test("the 3D tier is offered on a phone too, when the device's own graphics card can take it (client request 2026-09-23: match the laptop)", async ({
     page,
     isMobile,
   }) => {
-    test.skip(!isMobile, "desktop only");
+    test.skip(!isMobile, "the 'full' tier is exercised on desktop by other tests");
+    // `?journey=full` asks for the 3D tier regardless of the test machine's real hardware (it
+    // is meant for exactly this: reviewing a tier the machine wouldn't otherwise get) — the
+    // point of this test is that a NARROW screen no longer rules it out by itself.
     await page.goto("/?journey=full");
     await waitForReady(page);
-    await expect(page.locator("canvas:not([data-frames])")).toHaveCount(0);
+    await expect(page.locator("canvas:not([data-frames])")).toHaveCount(1);
   });
 
-  test("phones and small screens get the light version: a picture and the layers, no 3D", async ({
+  test("without a graphics card, a phone gets the same video-only journey as a desktop without one — not the light version", async ({
     page,
     isMobile,
   }) => {
-    test.skip(!isMobile, "desktop gets the full journey (previous test)");
+    test.skip(!isMobile, "the video tier is exercised on desktop by the test above");
+    // No override: on this software-rendered test browser that means "video" tier, the same
+    // as a desktop without a graphics card gets (previous tests) — screen width no longer
+    // downgrades it further to the light version.
     await page.goto("/");
+    await waitForReady(page);
+    await expect(page.locator("canvas:not([data-frames])")).toHaveCount(0); // no 3D
+    await expect(page.locator("canvas[data-frames]")).toHaveCount(1); // but a real descent
+    // (the video tier's drawn layers, a section of its own right after the journey — not the
+    // menu's #surfaces anchor, which sits inside the journey regardless of which tier it is)
+    expect(await page.locator("#surface-layers").count()).toBe(1);
+    const size = await page.evaluate(() => ({
+      wrap: document.getElementById("top")!.getBoundingClientRect().height,
+      vh: window.innerHeight,
+    }));
+    expect(size.wrap).toBeGreaterThan(size.vh * 5); // a real pinned, scroll-driven descent…
+    expect(size.wrap).toBeLessThan(size.vh * 6.5); // …the shorter, no-3D length
+  });
+
+  test("?journey=light still gives the plain, non-pinned version, on any device", async ({
+    page,
+  }) => {
+    await page.goto("/?journey=light");
     await waitForReady(page);
     await expect(page.locator("canvas:not([data-frames])")).toHaveCount(0);
     const layers = page.locator("#surfaces li");

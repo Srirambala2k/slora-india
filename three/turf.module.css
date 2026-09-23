@@ -36,3 +36,25 @@
   color: var(--slora-gold);
   opacity: 0.85;
 }
+
+/* drei's <Html> anchors this at the block's right edge in 3D world-space; on a wide desktop
+   canvas that leaves plenty of room for the label to grow rightward, but on a narrow phone
+   canvas that same anchor point projects close to the screen's own right edge, and the label
+   ran off screen. Grow it back toward the middle of the screen instead, dot still exactly on
+   the anchor point. (The shift lives on `.labelWrap`, not `.label` itself — `Rig` sets
+   `.label`'s own `transform` from JS every frame, which would just overwrite it here.) */
+@media (max-width: 640px) {
+  .labelWrap {
+    transform: translateX(-100%);
+  }
+  .label {
+    flex-direction: row-reverse;
+  }
+  .leader {
+    width: clamp(14px, 4vw, 24px);
+    background: linear-gradient(270deg, var(--slora-gold), rgb(217 164 65 / 0.35));
+  }
+  .name {
+    font-size: 10px;
+  }
+}

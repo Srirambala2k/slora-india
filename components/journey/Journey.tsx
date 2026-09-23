@@ -10,7 +10,7 @@ import { LAYERS } from "@/data/turf";
 import { frameUrls } from "@/data/sequences";
 import { useCapability } from "@/lib/device/capability";
 import { gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
-import { useMediaQuery, useReducedMotion } from "@/lib/hooks/useMediaQuery";
+import { useReducedMotion } from "@/lib/hooks/useMediaQuery";
 import {
   PHASES,
   descentProgress,
@@ -34,17 +34,18 @@ import styles from "./Journey.module.css";
 const TurfCanvas = dynamic(() => import("@/three/TurfCanvas"), { ssr: false });
 
 /**
- * The scroll journey (master prompt P§7–9): on desktop screens the hero stays pinned while
- * scrolling takes the camera down through the footage to the grass fibres and, where the
- * computer has a graphics card, on into a 3D turf that opens into a cross-section. Phones,
- * reduced-motion visitors and data-savers get the same story without the heavy parts.
+ * The scroll journey (master prompt P§7–9): the hero stays pinned while scrolling takes the
+ * camera down through the footage to the grass fibres and, where the device has a graphics
+ * card, on into a 3D turf that opens into a cross-section. This runs on phones too (client
+ * request 2026-09-22: match the laptop experience) wherever the device's own graphics card can
+ * take it — decided purely by `useCapability()`, never by screen width. Reduced-motion visitors
+ * and data-savers still get the same story without the heavy parts.
  */
 export function Journey() {
   const reduced = useReducedMotion();
-  const wide = useMediaQuery("(min-width: 900px)");
   const tier = useCapability();
   const mode: JourneyMode | null =
-    !reduced && wide && tier !== "simple" ? (tier === "full" ? "full" : "video") : null;
+    !reduced && tier !== "simple" ? (tier === "full" ? "full" : "video") : null;
 
   return (
     <>
