@@ -240,7 +240,7 @@ test.describe("home: the scroll journey", () => {
     await waitForReady(page);
     const thumbnail = () =>
       page.evaluate(() => {
-        const canvas = document.querySelector<HTMLCanvasElement>("#process canvas[data-frames]")!;
+        const canvas = document.querySelector<HTMLCanvasElement>("#provide canvas[data-frames]")!;
         const small = document.createElement("canvas");
         small.width = 16;
         small.height = 9;
@@ -253,7 +253,7 @@ test.describe("home: the scroll journey", () => {
       });
     const scrollProcessTo = (p: number) =>
       page.evaluate((fraction) => {
-        const section = document.getElementById("process")!;
+        const section = document.getElementById("provide")!;
         const top = section.getBoundingClientRect().top + window.scrollY;
         window.scrollTo(0, top + (section.offsetHeight - window.innerHeight) * fraction);
       }, p);

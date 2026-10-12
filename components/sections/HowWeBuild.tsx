@@ -141,11 +141,11 @@ function HowStage({ immersive, reduced }: { immersive: boolean; reduced: boolean
 
   return (
     <section
-      id="process"
+      id="provide"
       ref={wrapRef}
       className={immersive ? styles.tall : styles.simple}
       style={immersive ? { height: `${SCREENS * 100}svh` } : undefined}
-      aria-labelledby="process-h"
+      aria-labelledby="provide-h"
     >
       <div className={immersive ? styles.stage : styles.simpleStage}>
         <div className={styles.media}>
@@ -170,8 +170,7 @@ function HowStage({ immersive, reduced }: { immersive: boolean; reduced: boolean
         <div className={styles.veil} aria-hidden="true" />
 
         <header className={styles.title}>
-          <p className={styles.eyebrow}>04 · PROCESS</p>
-          <h2 id="process-h" className={styles.heading}>
+          <h2 id="provide-h" className={styles.heading}>
             <span className={styles.thin}>services we</span>
             <span className={styles.heavy}>provide</span>
           </h2>

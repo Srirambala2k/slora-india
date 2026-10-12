@@ -129,7 +129,7 @@ test.describe("How We Build", () => {
   }) => {
     await page.goto("/?journey=video");
     await waitForReady(page);
-    const process = page.locator("#process");
+    const process = page.locator("#provide");
     await process.scrollIntoViewIfNeeded();
 
     await process.getByRole("button", { name: "Enquire" }).click();

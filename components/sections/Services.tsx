@@ -100,7 +100,7 @@ function ServiceStage({ pinned }: { pinned: boolean }) {
 
   return (
     <section
-      id="services"
+      id="process"
       ref={wrapRef}
       className={pinned ? styles.tall : styles.simple}
       style={pinned ? { height: `${SCREENS * 100}svh` } : undefined}
@@ -108,7 +108,7 @@ function ServiceStage({ pinned }: { pinned: boolean }) {
     >
       <div className={pinned ? styles.stage : styles.simpleStage}>
         <header className={styles.head}>
-          <p className={styles.eyebrow}>SERVICES · STEP BY STEP</p>
+          <p className={styles.eyebrow}>04 · PROCESS</p>
           <h2 id="services-h" className={styles.sr}>
             Our services, step by step
           </h2>

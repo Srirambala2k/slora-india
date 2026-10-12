@@ -75,13 +75,6 @@
   position: static;
   order: 0;
 }
-.eyebrow {
-  margin: 0 0 1rem;
-  font-family: var(--slora-font-mono);
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  color: var(--slora-gold);
-}
 .heading {
   margin: 0;
   display: flex;
