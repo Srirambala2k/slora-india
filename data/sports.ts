@@ -2,7 +2,10 @@ import { stills, type StillId } from "@/data/media";
 import type { RequirementType } from "@/lib/leads/schema";
 
 /**
- * The Sports rail (master prompt P§14): seven categories, in the order the brief lists them.
+ * The Sports rail (master prompt P§14): the brief's seven categories (Hockey since removed at the client's request, 2026-10-01), in its order, plus three
+ * more added 2026-09-24 (CR-1) so every new material surface card has a sport to link to —
+ * Badminton, Basketball and Pickleball (Basketball and Pickleball existed only as surface-card
+ * names before; Badminton is new).
  *
  * `applications` and `technical` are shown ONLY when SLORA supplies verified values (and they
  * must say where they came from). Nothing is invented: until then a panel simply omits them.
@@ -11,8 +14,19 @@ import type { RequirementType } from "@/lib/leads/schema";
  * generic courts and grounds, NOT the sport named on the panel, and the section says so.
  * The one-line taglines are placeholder wording for SLORA to confirm.
  */
+export type SportId =
+  | "football"
+  | "cricket"
+  | "tennis"
+  | "padel"
+  | "multi-sport"
+  | "athletics"
+  | "badminton"
+  | "basketball"
+  | "pickleball";
+
 export interface SportPanel {
-  id: string;
+  id: SportId;
   n: string;
   /** Plain name, used by screen readers, the button and the counter. */
   name: string;
@@ -54,7 +68,7 @@ export const SPORT_PANELS: readonly SportPanel[] = [
     word: ["Foot", "ball"],
     line: "the beautiful game, underfoot.",
     requirement: "Football Turf",
-    image: still("football-pitch"),
+    image: still("sport-football"),
   },
   {
     id: "cricket",
@@ -63,47 +77,63 @@ export const SPORT_PANELS: readonly SportPanel[] = [
     word: ["Cricket"],
     line: "where every over begins.",
     requirement: "Cricket Turf",
-    image: still("macro-grass"),
-  },
-  {
-    id: "hockey",
-    n: "03",
-    name: "Hockey",
-    word: ["Hockey"],
-    line: "pace, precision, surface.",
-    image: still("dusk-court"),
+    image: still("sport-cricket"),
   },
   {
     id: "tennis",
-    n: "04",
+    n: "03",
     name: "Tennis",
     word: ["Tennis"],
     line: "every serve starts here.",
-    image: still("court-pickleball", "18% 72%", 1.35),
+    image: still("sport-tennis"),
   },
   {
     id: "padel",
-    n: "05",
+    n: "04",
     name: "Padel",
     word: ["Padel"],
     line: "fast rallies, tight spaces.",
-    image: still("court-basketball", "80% 60%", 1.25),
+    image: still("sport-padel"),
   },
   {
     id: "multi-sport",
-    n: "06",
+    n: "05",
     name: "Multi-sport",
-    word: ["Multi", "sport"],
+    word: ["Multi-sport"],
     line: "one court, many games.",
     requirement: "Multi-Sport",
-    image: still("court-shuttle"),
+    image: still("sport-multi-sport"),
   },
   {
     id: "athletics",
-    n: "07",
+    n: "06",
     name: "Athletics",
     word: ["Athletics"],
     line: "lanes, lines, records.",
-    image: still("athletics-track"),
+    image: still("sport-athletics"),
+  },
+  {
+    id: "badminton",
+    n: "07",
+    name: "Badminton",
+    word: ["Badminton"],
+    line: "quick feet, quicker hands.",
+    image: still("sport-badminton"),
+  },
+  {
+    id: "basketball",
+    n: "08",
+    name: "Basketball",
+    word: ["Basketball"],
+    line: "built for the bounce.",
+    image: still("sport-basketball"),
+  },
+  {
+    id: "pickleball",
+    n: "09",
+    name: "Pickleball",
+    word: ["Pickleball"],
+    line: "made for the rally.",
+    image: still("sport-pickleball"),
   },
 ];

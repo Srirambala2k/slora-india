@@ -60,13 +60,13 @@ test.describe("home: entrance → header → hero", () => {
     if (isMobile) {
       await page.getByRole("button", { name: "MENU" }).click();
       const menu = page.getByRole("dialog", { name: "Menu" });
-      await expect(menu.getByRole("link")).toHaveCount(6); // the six sections…
+      await expect(menu.getByRole("link")).toHaveCount(5); // the five sections…
       await expect(menu.getByRole("button", { name: /BUILD WITH SLORA/ })).toBeVisible(); // …and the chat button
       await menu.getByRole("link", { name: /sports/i }).click();
       await expect(menu).toBeHidden();
     } else {
       const nav = page.getByRole("navigation", { name: "Primary" });
-      await expect(nav.getByRole("link")).toHaveCount(6);
+      await expect(nav.getByRole("link")).toHaveCount(5);
       await nav.getByRole("link", { name: /sports/i }).click();
     }
     // Lenis animates the jump, so wait for the section to reach the top of the screen
@@ -373,7 +373,7 @@ test.describe("chat window", () => {
   test.slow();
   const slowly = expect.configure({ timeout: 30_000 });
 
-  test("opens from the floating button, asks the six questions, checks each answer, and is honest that it is a preview", async ({
+  test("opens from the floating button, asks the six questions, checks each answer, and ends with a WhatsApp send step without claiming it was received", async ({
     page,
   }) => {
     await page.goto("/");
@@ -407,7 +407,17 @@ test.describe("chat window", () => {
     // the summary shows the tidied-up details, and does NOT pretend anything was sent
     await slowly(chat.locator("dd", { hasText: "+919876543210" })).toBeVisible();
     await slowly(chat.locator("dd", { hasText: "10,000 sq ft" })).toBeVisible();
-    await slowly(chat.getByText(/PREVIEW ONLY/)).toBeVisible();
+    // …it hands over to WhatsApp (when a number is configured) or says it is only a preview, and
+    // either way never claims the details were received
+    await slowly(chat.getByText(/ONE LAST STEP|PREVIEW ONLY/)).toBeVisible();
+    const whatsapp = chat.getByRole("link", { name: /SEND ON WHATSAPP/ });
+    if ((await whatsapp.count()) > 0) {
+      const href = (await whatsapp.getAttribute("href")) ?? "";
+      expect(href).toMatch(/^https:\/\/wa\.me\/\d+\?text=/);
+      const message = decodeURIComponent(href.split("?text=")[1]);
+      expect(message).toContain("Name: Asha Raman");
+      expect(message).toContain("Contact Number: +919876543210");
+    }
     await slowly(chat.getByText(/have been received/i)).toHaveCount(0);
 
     // Escape closes it

@@ -71,7 +71,7 @@ export function About() {
       <div className={styles.grid}>
         <div className={styles.copy}>
           <p className={styles.eyebrow} data-reveal-in>
-            06 · ABOUT
+            05 · ABOUT
           </p>
           <h2 id="about-h" className={styles.heading} data-reveal-in>
             <span className={styles.thin}>New Name</span>

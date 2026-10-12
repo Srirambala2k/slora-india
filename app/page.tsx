@@ -6,6 +6,8 @@ import { Header } from "@/components/navigation/Header";
 import { Journey } from "@/components/journey/Journey";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { HowWeBuild } from "@/components/sections/HowWeBuild";
+import { Projects } from "@/components/sections/Projects";
+import { Services } from "@/components/sections/Services";
 import { Sports } from "@/components/sections/Sports";
 import { SurfaceCards } from "@/components/sections/SurfaceCards";
 
@@ -23,11 +25,9 @@ export default function Home() {
       <main>
         <Journey />
         <SurfaceCards />
-        {/* Landscape and Projects need real photos/details from SLORA before they are worth
-            showing (plan §8 #5); removed from the live page for now rather than shown as "in
-            build" placeholders. Re-add with <ChapterStub id="landscape" n="03" label="LANDSCAPE" />
-            (and similarly for "projects") once that material arrives. */}
         <Sports />
+        <Projects />
+        <Services />
         <HowWeBuild />
         <About />
         <Contact />

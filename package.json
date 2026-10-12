@@ -15,7 +15,11 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "assets:encode": "node scripts/encode-video.mjs",
-    "assets:check": "node scripts/encode-video.mjs --check",
+    "assets:encode:surfaces": "node scripts/encode-surface-photos.mjs",
+    "assets:encode:sports": "node scripts/encode-sport-photos.mjs",
+    "assets:encode:projects": "node scripts/encode-project-videos.mjs",
+    "assets:encode:services": "node scripts/encode-service-images.mjs",
+    "assets:check": "node scripts/encode-video.mjs --check && node scripts/encode-surface-photos.mjs --check && node scripts/encode-project-videos.mjs --check && node scripts/encode-service-images.mjs --check",
     "assets:logo": "node scripts/make-logo-layers.mjs"
   },
   "dependencies": {

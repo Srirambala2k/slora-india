@@ -11,7 +11,7 @@ export function Contact() {
 
   return (
     <section id="contact" className={styles.section} aria-labelledby="contact-h">
-      <p className={styles.eyebrow}>07 · CONTACT</p>
+      <p className={styles.eyebrow}>06 · CONTACT</p>
       <h2 id="contact-h" className={styles.heading}>
         <span className={styles.thin}>get in</span>
         <span className={styles.heavy}>touch.</span>

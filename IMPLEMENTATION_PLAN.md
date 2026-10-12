@@ -1,6 +1,6 @@
 # SLORA — Implementation Plan
 
-v1.6 · 2026-09-23 · **Phase 0 complete · Phase 1 built · Phase 2 started (Sports, real Contact details, Instagram)**
+v1.7 · 2026-09-25 · **Phase 0 complete · Phase 1 built · Phase 2 started (Sports, real Contact details, Instagram)**
 Built from: `master_prompt.md` (all 55 sections), `photo/slora_logo.png`, `video/hero_portion.mp4`, `video/video_2.mp4`, the typography reference image (Mamenchisa specimen), web research (sources in Appendix B), and contact details supplied directly by SLORA on 2026-09-22.
 
 Phase 0 (foundations) and Phase 1 (the first complete experience) are built and verified; Phase 2 has started (Sports, and now real Contact/About content). See the plain-English progress report just below. The rest of Phases 2–4 have not started.
@@ -12,6 +12,20 @@ Phase 0 (foundations) and Phase 1 (the first complete experience) are built and 
 # Progress report (in plain English)
 
 *Written for anyone, no technical knowledge needed. Everything after this section is the detailed technical plan.*
+
+## Built 2026-09-25: your client's feedback — more surfaces, Surfaces and Sports linked both ways, Landscape removed
+
+This is now live on the site (checked on laptop and phone screens, in an automated test suite of 351 checks — 0 failures). Your client asked for three things, all three are done:
+
+1. **Show the other surfaces SLORA can build**, not just turf — acrylic, sports vinyl, rubber (EPDM running tracks), wooden, synthetic flooring, and maintenance & resurfacing. The Surfaces section now shows all 7 as cards, up from the original 5 (which were actually named after sports, not surfaces — that confusion is gone too).
+2. **Link Surfaces and Sports both ways.** Each surface card now has a "played here" row naming the sports it's used for — click one and the page glides straight to that sport. Each sport panel has a matching "played on" row of surfaces — click one and it glides back. Works the same way on a phone (swipe) as on a laptop (the pinned scrolling rail), and the link even works if someone bookmarks or shares it (e.g. `yoursite.com/#sports/football`).
+3. **Remove Landscape** — gone from the menu, the opening tagline, the page description search engines see, and the chat's list of things someone can enquire about. Checked with a full search of the codebase; nothing mentions it anymore except this plan's own history.
+
+**One thing still open, by design:** the sport-per-surface pairings (which sports go with which surface) are my own best-guess table, built from industry norms and the reference material you sent — not something SLORA has confirmed. The site says so on screen ("to be confirmed by SLORA") until they tick or correct it. See §8 #18 below for the exact table to review.
+
+**Photos:** four of the six new surfaces (acrylic, rubber, sports vinyl, wooden) now use real reference photos you sent — checked, resized and colour-matched to the site's style. **Two honest flags on those photos, worth reading before this goes further:** they're small (736 px — Pinterest/search-result size, softer than a final site should use) and several appear to be pulled from specific companies' own marketing pages (their filenames name the company), which is a real copyright risk if this goes to public launch as-is, not just a quality one. Full detail, photo-by-photo, is in section "CR-1" below. The other two surfaces — synthetic flooring and maintenance/resurfacing — didn't have a usable photo in what was sent (one folder had a manufacturer's own diagram, the other had someone's advert for lawn care); **you've said you'll send better ones for these two later**, so for now they reuse an existing stand-in picture, clearly labelled "illustrative."
+
+**Videos:** none needed for this change.
 
 ## Update: the opening scroll experience — the moving footage, then the 3D turf — now plays on phones too, not just laptops
 
@@ -120,15 +134,21 @@ You gave us SLORA's real address, phone number and Instagram. They are now live 
 
 **How we checked it.** **225 automatic checks** and **12 new browser checks** (opening the menu, checking every link's real destination, checking the menu closes on Escape and on an outside click, checking both Instagram links, checking the two contact buttons go to two *different* places) all pass, on both a computer-sized and a phone-sized screen.
 
+## Update: Projects ("our work") is built (2026-10-12)
+
+The Projects placeholder is now a real section between Sports and Process. It shows **five cards** made from SLORA's own footage: Vellore Turf (aerial football pitch), TBM Pickleball (court coating, 7 clips), Pickleball Court, Flooring (rooftop turf and cricket net) and Behind the Scenes (site preparation). **Clicking a card opens a detail view** with a large video player, a strip of clip thumbnails, arrows and the ← → keys, the project's text, and an "Enquire about a project like this" button that opens the chat. Each project has its own link (`#projects/tbm-pickleball`), so it can be shared and the back button closes it. Checked on a desktop-sized and a phone-sized screen (cards, opening, stepping through clips, closing), with 272 unit tests and the new e2e tests passing.
+
+**What is still needed from SLORA:** the real project names, places, sizes, dates and a description for each (today the names come from the folder names and the text only describes what the clips show; the page says "to be confirmed"), and **permission to show the people in the Pickleball clips (some are children)**. About 50 clips were supplied; 23 were used. Say which others to add.
+
 ## Update: the Sports section is built (Phase 2 has started)
 
-The "Sports" placeholder is now a real section, the first piece of Phase 2. It shows the **seven categories from your brief, in your order: Football, Cricket, Hockey, Tennis, Padel, Multi-sport, Athletics**, each as a large panel in the same style as the surface cards (a giant word, a thin line under it, a gold rule that draws on hover).
+The "Sports" placeholder is now a real section, the first piece of Phase 2. It shows the **categories from your brief (Hockey has since been removed at your request): Football, Cricket, Tennis, Padel, Multi-sport, Athletics**, each as a large panel in the same style as the surface cards (a giant word, a thin line under it, a gold rule that draws on hover).
 
 **What you see**
 
 - **On a computer with a graphics card:** the section pins to the screen and **scrolling slides the seven panels sideways**. The row leans very slightly with your scroll speed, each picture drifts a little against its panel for depth, and a **gold line at the bottom fills up** with a counter (*03 / 07 · HOCKEY*).
 - **On a phone, a tablet, or with animations turned off:** a plain row of cards that you **swipe** (it snaps card to card), with a counter, a progress line and two small arrows.
-- **Each panel has one button, "ASK ABOUT FOOTBALL →"** (and so on) that opens the enquiry chat. For **Football, Cricket and Multi-sport** the chat already knows what you are enquiring about and does not ask that question again. For **Hockey, Tennis, Padel and Athletics** the chat asks, because we would rather ask than guess wrong and record a Tennis enquiry as Football.
+- **Each panel has one button, "ASK ABOUT FOOTBALL →"** (and so on) that opens the enquiry chat. For **Football, Cricket and Multi-sport** the chat already knows what you are enquiring about and does not ask that question again. For **Tennis, Padel and Athletics** the chat asks, because we would rather ask than guess wrong and record a Tennis enquiry as Football.
 - With the keyboard, pressing Tab onto a panel's button slides that panel into view.
 
 **Please read this part: the pictures and the wording are stand-ins.**
@@ -795,12 +815,94 @@ Order chosen to reuse the most: **Sports → Engineering → Stadium → Landsca
 - **Engineering (P§20 "BEAUTY HAS STRUCTURE."):** the 8-step process scroll. Text is *pending client approval*; video only where the footage exists; "photo pending" slots elsewhere.
   - **Built, then removed (2026-09-22).** A first version was built as a plain scrolling list (not pinned): headline "beauty has structure.", the brief's 8 generic steps, a picture only for the 2 steps the installation footage plainly shows (ground preparation, surface installation — two new stills, `slora-engineering-ground-still.webp`/`slora-engineering-install-still.webp`), "PHOTO PENDING" for the other 6, a scroll-filled gold spine, sharing the nav's single "PROCESS" item with How We Build. **The client saw it and asked for it to be removed**, so it was taken out again in full: the component, its data file, its stills, and its tests. Building this also surfaced and fixed a **real, separate bug**: a hydration-timing race in `useReducedMotion()` (it can briefly report `false` right after hydration before correcting to `true`) combined with GSAP's `.from()` immediately rendering its "from" state could leave reduced-motion visitors with permanently invisible content. Fixed by explicitly clearing residual inline styles when `reduced` is true, in **Engineering (removed with it), `SurfaceFallback.tsx`, and `EditorialCard.tsx`** (the two still in use) — this fix stayed after the section that found it was removed.
 - **Stadium 3D (P§15):** OUTSIDE → ENTRANCE → STANDS → FIELD → TURF, then `PERFORMANCE`. It shows **only verified project data** (else the section ends on the turf, with no numbers).
-- **Landscape (P§16):** STADIUM → FIELD → GREEN → GARDEN → TERRACE → ROOFTOP → RESORT, headline **GREEN WITHOUT LIMITS.** Needs real project photography; otherwise stays behind a feature flag.
+- ~~**Landscape (P§16):** STADIUM → FIELD → GREEN → GARDEN → TERRACE → ROOFTOP → RESORT, headline **GREEN WITHOUT LIMITS.** Needs real project photography; otherwise stays behind a feature flag.~~ **Dropped from scope by the client (2026-09-24), see CR-1 below.**
 - **Playground (P§17):** architectural, safety-flooring focus, not childish. Photography-dependent.
 - **Project Universe (P§18):** instanced nodes in a dark spatial scene; hover expands, click flies the camera into the project (FX-09 Flip for the DOM hand-off). Data-driven from `data/projects.ts`; **only real projects render in production**.
 - **Case study template (P§19):** BEFORE / BUILD / AFTER, then LOCATION · APPLICATION · AREA · SURFACE · SCOPE · DURATION. Sections without assets collapse gracefully.
 
 **Gate:** every section is data-driven with the integrity rule (§4.4); no unverified spec renders; scroll performance holds through the full page.
+
+### CR-1 (client feedback, 2026-09-24): more surfaces, Surfaces ↔ Sports linked both ways, Landscape removed — ✅ BUILT 2026-09-25, pairings still "to be confirmed"
+
+**What the client asked** (after seeing the site; reference material: three Google searches — "astro turf cricket mat for cricket", "artificial turf for football field", "epdm sports flooring" — and the competitor page `lp.4ksports.in/badminton-lp/`, which lists Acrylic, Sports Vinyl, Rubber, Wood and Synthetic flooring plus Maintenance & Resurfacing):
+1. **Surfaces:** also show the other surfaces SLORA can build (from the references: acrylic, sports vinyl, rubber/EPDM, wooden, synthetic flooring, maintenance & resurfacing, next to artificial turf).
+2. **Surfaces and Sports interconnected, both ways.** A surface says which sports can be played on it, and clicking a sport goes to that sport in Sports. A sport says which surfaces it is played on, and clicking a surface goes to that surface.
+3. **Remove the Landscape topic.**
+
+**Design decisions** (recommended defaults so work can start; each is in §8 #18 for the client to confirm)
+- **D1 · The Surfaces deck becomes material-based.** Today its five cards are named after sports (Football turf, Pickleball court, Shuttle court, Park setup, Basketball court), which duplicates and muddles Sports. New deck, 7 cards: **Artificial turf · Acrylic · Sports vinyl · Rubber / EPDM · Wooden · Synthetic (PU) · Maintenance & resurfacing** (the last is a *service*, so it has no sports row; it gets an "Enquire" instead). The Football video background moves to the Artificial-turf card (it is turf footage).
+- **D2 · Sports grows from 7 to 10:** adds **Badminton, Basketball, Pickleball** (today they only exist as deck cards; without them vinyl/wood/acrylic would have nothing to link to). The existing court stand-in pictures cover these until real photos arrive.
+- **D3 · One relation table is the single source of truth** (`data/surfaceSports.ts`); both directions are derived from it, so the two views can never disagree. A unit test fails if a surface has no sport, a sport has no surface, or an id does not exist.
+- **D4 · Landscape is removed everywhere it is offered:** menu item, hero tagline, page description (meta), the Park-setup card (its only link was the dead `#landscape`), design-preview text, and the **"Landscape" enquiry type** in the chat/lead schema (SLORA is no longer offering it, so it should not be offered as an enquiry). *Confirm the enquiry-type part with the client; the rest is unambiguous.* No real leads exist yet (chat is preview-only), so the schema change is safe.
+- **D5 · The pairings are shown as "to be confirmed by SLORA"** (same on-screen note pattern as the pictures and Sports wording) until the client signs off; chips carry names only — no thickness, performance or certification claims (never-invent rule).
+- **D6 · Enquiry pre-fill:** the flooring cards pre-fill **"Sports Flooring"** (the exact enquiry category they belong to); Artificial turf pre-fills nothing (Football Turf vs Cricket Turf is ambiguous → the chat asks); Maintenance pre-fills nothing.
+- **D7 (optional, same problem as Landscape):** the **"Projects"** menu item also goes nowhere today (its section was removed on 2026-09-22). Recommend hiding it too until real projects exist — one line in `data/navigation.ts`.
+
+**Proposed pairings — for SLORA to tick or correct** (industry-standard defaults, *not* SLORA claims until confirmed)
+
+| Surface | Sports played on it |
+|---|---|
+| Artificial turf | Football · Cricket · Hockey¹ · Padel · Multi-sport |
+| Acrylic | Tennis · Basketball · Pickleball · Multi-sport |
+| Sports vinyl | Badminton · Basketball · Multi-sport |
+| Rubber / EPDM | Athletics · Multi-sport |
+| Wooden | Basketball · Badminton · Multi-sport |
+| Synthetic (PU)² | Badminton · Tennis · Basketball · Multi-sport |
+| Maintenance & resurfacing | *(service — no sports row)* |
+
+¹ hockey needs a hockey-specific turf; confirm SLORA builds it. ² confirm whether "Synthetic (PU)" is a separate offer from Acrylic and Vinyl or the same product under another name.
+
+**How the two-way links work**
+- **Deep links:** `#surfaces/<id>` and `#sports/<id>` (shareable, back-button friendly, also work when the page loads with one in the address).
+- A **surface card** gets a "PLAYED HERE" row of sport chips → each is a link to `#sports/<sportId>`: glide to Sports (Lenis) and bring that panel into view. Pinned rail: reuse `progressForPanel()` (already used when a keyboard focuses an off-screen panel, `Sports.tsx`); swipe row: scroll the row to the panel. Then move focus to the panel and announce it (keyboard/screen-reader users).
+- A **sport panel** gets a "PLAYED ON" row of surface chips → `#surfaces/<surfaceId>`: glide to Surfaces and `goTo(index)` on the deck.
+- Built as a small module `lib/links/crossLink.ts` (pure parse/build of these hashes + a tiny store in the style of `lib/chat/store.ts`) with listeners in `CardCarousel` and `Sports` that also handle first load and `hashchange`. Reduced motion: jump, no glide.
+
+**Steps** (relative size, not calendar promises) — **all built 2026-09-25**, on the D1–D7 defaults above (client confirmation of §8 #18 is still open; see "Done when" below for what that changes)
+
+| # | Step | Size | Notes |
+|---|---|---|---|
+| 1 | **Remove Landscape** | S | ✅ `data/navigation.ts` renumbered (01 Surfaces, 02 Sports, 03 Projects, 04 Process, 05 About — D7/hiding Projects was NOT done, it stayed out of scope as "optional"); eyebrow numbers in `HowWeBuild`/`About`/`Contact`; hero tagline (`Journey.tsx`, now "ARTIFICIAL TURF · SPORTS FLOORING"); `app/layout.tsx` description; `app/specimen/page.tsx`; `app/page.tsx` comment; `"Landscape"` removed from `REQUIREMENT_TYPES` (`lib/leads/schema.ts`) and every test that named it; menu-count tests 6 → 5. `grep -ri landscape` across the repo now only matches this plan's own history, the original brief, and code comments explaining the removal |
+| 2 | Data: relation table, 7 surface cards, 10 sports | M | ✅ `data/surfaceSports.ts` (`SPORTS_BY_SURFACE`, `SURFACES_BY_SPORT` derived from it, `sportsFor`/`surfacesFor`); `data/surfaces.ts` rebuilt (`SurfaceCardId` union, 7 cards); `data/sports.ts` extended (`SportId` union, +Badminton/Basketball/Pickleball) |
+| 3 | Photo pipeline | S | ✅ Built first, see below |
+| 4 | Cross-link mechanism | M | ✅ `lib/links/crossLink.ts`: the hash IS the state (`#surfaces/<id>` / `#sports/<id>`, shareable, works on a fresh load) and `hashchange` is the pub-sub, so no separate store was needed. `useCrossLinkTarget(section)` hook; `goToCrossLink(hash)` (re-clicking the same chip dispatches a synthetic `hashchange`, since the real one would not fire for an unchanged hash). Landing on a target: `CardCarousel` calls `goTo(index)` + `lenis.scrollTo` (offset for the fixed header) + focuses the card's link; `Sports` focuses the target panel's own button, which — in the pinned rail — triggers the *existing* keyboard-focus scroll handler for free (no new pinned-rail scroll logic needed); the swipe row gets an explicit `scrollIntoView`. Reduced motion: instant, no glide |
+| 5 | UI: chips on `EditorialCard` and Sports `Panel`; new slab tones; giant words for the new cards | M | ✅ New tones `wood`/`synthetic`/`steel` alongside the existing `blue`/`teal`/`clay` (all reused for the new cards — none needed inventing new CSS beyond the 3 new ones). **Found and fixed a real overlap bug while checking this at 390/375/360 px and short laptop windows** (see below) |
+| 6 | Tests | M | ✅ 259 unit tests (was 243), 92 e2e checks (0 failed, 22 skipped by design) on the production build, both projects — see below |
+| 7 | Docs + verification report + push | S | This update. Not yet pushed — see the summary given after this build |
+
+**Photo pipeline — built and run 2026-09-25.** The client supplied `photo/photos_surface/<surface>/` (two reference photos per surface: acrylic-court, rubber-trac, synthetic-cour, vinyl-court, wood-court, resurfacing). `scripts/encode-surface-photos.mjs` (new — same shape as `encode-video.mjs`: reads originals, never modifies them, writes graded/resized web output, checked by `npm run assets:check`) converted the usable ones to `public/images/surfaces/<id>.webp` (1280 px wide, graded, ≤ 200 KB) and registered them in `data/media.ts`'s `stills` (`acrylic-court`, `rubber-track`, `vinyl-court`, `wood-court`, all `provenance: "illustrative"`). **Only one of the two photos per folder was used** — the script's header comment records exactly which, and why, for whoever touches this next:
+
+| Surface | Used | Result |
+|---|---|---|
+| Acrylic | "…Houston.jpg" (real outdoor multi-court, mid-build, aerial) | ✅ usable |
+| Rubber / EPDM | "download.jpg" (clean, empty running track) | ✅ usable |
+| Sports vinyl | "…Guardwe.jpg" (indoor badminton hall) | ✅ usable |
+| Wooden | "Northern BC…jpg" (gym floor mid-resurfacing) | ✅ usable |
+| Synthetic (PU) | *neither* — one is a manufacturer's diagram with "PU-Sport" branding baked into the pixels, the other a marketing composite (a court photo with a product-swatch graphic glued on) | ❌ still needed — reuses an existing illustrative court still for now |
+| Maintenance & resurfacing | *neither* — one is a specific company's own tile-swatch marketing render, the other an unrelated business's advert for **lawn (turf) cleaning**, not a sports surface | ❌ still needed — reuses an existing illustrative court still for now |
+
+The rejected photo in each *usable* folder wasn't wrong, just unused for now (kept on disk, untouched): `acrylic-court/download.jpg` is actually an indoor court (mislabelled for that folder); `rubber-trac/download (1).jpg` carries a visible Shutterstock watermark (never ship a watermarked stock photo, licensed or not); `wood-court/…Readers Share…jpg` is a ~12 KB thumbnail, far too low-resolution.
+
+**Two things worth knowing plainly, not just in a code comment:**
+- **Resolution.** Every supplied photo is 736 px wide — a search-result/Pinterest download size, not real photography (the project's own bar, stated to the client earlier, was "at least 2400 px wide"). They are upscaled to the site's usual 1280 px still width here, which is fine for development and client review, but will read as a little soft on a large screen. Treat them as the same tier as the AI stand-in footage already on the site: real content standing in for real content, not final imagery.
+- **Rights.** Several of the original filenames name the company they almost certainly belong to — "Guardwe" (a flooring supplier), "Northern BC" (a flooring contractor), "Build My Courts" (a court builder) — i.e. these are very likely **someone else's own marketing photography**, not licensed stock. Using another company's project photo to represent SLORA's own capability is a real legal and reputational risk, separate from the resolution question. **These four should not go into a public launch as-is** — either SLORA's own project photos (the client said these surfaces can be built by them) or properly licensed stock (Unsplash/Pexels/Pixabay, licence checked, or paid stock) should replace them first. The "ILLUSTRATIVE PICTURES" note already on screen covers this honestly in the meantime.
+
+**Still needed** (nothing is blocked on these — existing illustrative stills are reused until they arrive; save into `photo/photos_surface/<name>/`, tell me, and `npm run assets:encode:surfaces` picks them up once added to the script's list):
+
+| Save as | Search for | Should show |
+|---|---|---|
+| `synthetic-cour/*.jpg` | "synthetic badminton court flooring", "PU sports flooring court" (a *photo* of a real court, not a manufacturer's layer diagram or swatch composite) | a real green/blue synthetic (PU) court, no branding baked in |
+| `resurfacing/*.jpg` | "sports court resurfacing", "tennis court repainting" (a real court or track being worked on, not a lawn/turf-care advert) | a court or track mid-resurfacing |
+| *(sports panels)* `badminton.jpg`, `basketball.jpg`, `pickleball.jpg` | "badminton court overhead", "outdoor basketball court hoop", "pickleball court" | the sport's own court — optional: `court-shuttle`/`court-basketball`/`court-pickleball` (already on the site) are reasonable stand-ins for these three new Sports panels meanwhile |
+
+Rules for any new photo: **at least 2000 px wide** (these were 736 — noticeably soft), no watermark/logo/text/visible brand, a calm area at the **top-left** (the giant word sits there). **Do not use another company's own marketing/portfolio photo** — the same problem as the four above, worth avoiding going forward rather than compounding.
+
+**Videos:** **none are required for this change.** The site only gives a card a video when there is real matching footage, so these are optional and best filmed by SLORA on a real job — silent 6–10 s loops, 1080p landscape MP4 (H.264), no watermark, ≤ 10 MB each: (1) an acrylic coat being rolled or squeegeed on a court (stock search: "acrylic court resurfacing", "tennis court painting"); (2) EPDM track being laid or sprayed ("EPDM track installation", "running track construction"); (3) a vinyl sports-floor roll being installed ("sports vinyl flooring installation"); (4) a wooden floor being sanded and polished ("wooden sports floor polishing"); (5) court line marking ("court line marking"); (6) turf brushing / infill ("artificial turf brushing" — turf laying is already covered by the How We Build footage).
+
+**Risks — resolved during the build:** the deep link into the pinned rail (reused the existing keyboard-focus scroll handler rather than computing scroll position separately — works correctly with all 10 panels); the deck index, the hash and the browser back button staying in sync (hash-is-the-state design, no divergence possible); chips fitting on a phone-sized card (fit, but only after finding and fixing a real overlap — the new "PLAYED HERE"/"PLAYED ON" chip rows made `EditorialCard`'s absolutely-positioned `.body` taller, which pushed up into the giant word behind it, since `overflow:hidden` + absolutely-positioned children never grow the card's own box; fixed by raising `.card`'s `max-height`/mobile `min-height` and tightening `.body`'s `gap`, verified with `getBoundingClientRect()` measurements from 360 px to 1920 px wide, mobile and desktop); test churn (the card and menu tests were rewritten, 259 unit + 92 e2e all pass).
+**Risk still open:** the pairings themselves are factual claims about what SLORA builds — they're internally consistent and industry-plausible, but self-authored, not SLORA-confirmed, so they stay marked "to be confirmed by SLORA" on screen until sign-off (§8 #18).
+
+**Done when:** every surface lists ≥ 1 sport and every sport ≥ 1 surface (unit-tested ✅ `surfaceSports.test.ts`); a chip click lands on the right item, both directions, on a laptop (pinned rail ✅), a laptop without a graphics card / phone (swipe row ✅) and a phone-sized screen (✅ mobile Playwright project); "Landscape" appears nowhere on the page, in the menu, the page description or the chat (✅); menu = 5 links (✅); lint, typecheck, unit and e2e pass on the production build (✅ 259 unit / 92 e2e, 0 failed); checked visually at phone sizes and short laptop windows (✅, this is what surfaced the word/tagline overlap bug, fixed); this plan updated (✅, `CLAUDE.md` still pending); **not yet pushed** — waiting on the go-ahead, and on §8 #18's actual client sign-off (the pairings table is real and consistent, but still self-authored, not SLORA-confirmed).
 
 ### Phase 3: Milestone 3, "The lead engine" (L) — prompt P§53
 
@@ -856,6 +958,9 @@ Mobile-specific behaviour (not shrunk desktop: video/image-sequence/CSS fallback
 | 15 | **Photos for the surface-card deck** (pickleball, shuttle, park setup, basketball) + SLORA's real court build-up for the court cards' slab | 1H | Illustrative stand-in stills (labelled on screen); slab shows "SURFACE" only |
 | 16 | **Sports panel content:** real photos/video per sport, verified `applications` + `technical` (with a `source`), approval of the placeholder taglines, and the enquiry type each sport should pre-fill in the chat (only Football, Cricket and Multi-sport map exactly today) | Phase 2 Sports | Illustrative stand-in stills, placeholder taglines, no applications/technical shown, chat asks the question |
 | 17 | **Try the opening scroll journey (now including 3D) on a handful of real phones**, old and new, and say whether it feels smooth enough to leave switched on by default, or whether the `full` tier should be held back on weaker phones even when they report hardware WebGL support | Phase 2/4 | Stays on for any phone whose browser reports a real graphics card (current behaviour); nothing changes until told otherwise |
+| 18 | **CR-1 confirmations:** (a) the list of surfaces SLORA builds (turf, acrylic, sports vinyl, rubber/EPDM, wooden, synthetic/PU, maintenance & resurfacing — add or remove any); (b) tick or correct every sport-per-surface pairing in the CR-1 table (esp. hockey turf, and whether Synthetic/PU is separate from Acrylic and Vinyl); (c) OK to add Badminton, Basketball, Pickleball as Sports panels; (d) Landscape removal includes the "Landscape" enquiry type; (e) also hide the dead "Projects" menu item | CR-1 | Proposed defaults in CR-1 (D1–D7), pairings marked "to be confirmed" on screen |
+| 19 | **Photos for the new surfaces** (six must-haves, listed with search names and file names in CR-1) — ideally SLORA's own project photos | CR-1 | Existing AI stand-in pictures + tinted court slab; labelled "ILLUSTRATIVE" |
+| 20 | **Videos** — none required; optional real footage per surface (list in CR-1) | CR-1 | No video on those cards |
 
 ---
 

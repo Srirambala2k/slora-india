@@ -1,12 +1,12 @@
 import { z } from "zod";
 import { parsePhoneNumberFromString, type CountryCode } from "libphonenumber-js";
 
-/** Master prompt §23, question 3. */
+/** Master prompt §23, question 3. "Landscape" removed 2026-09-24 (CR-1): the client is no
+ *  longer offering it, and no real lead has ever used it (the chat was still preview-only). */
 export const REQUIREMENT_TYPES = [
   "Football Turf",
   "Cricket Turf",
   "Sports Flooring",
-  "Landscape",
   "Playground",
   "Stadium",
   "Multi-Sport",

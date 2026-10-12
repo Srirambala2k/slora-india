@@ -18,8 +18,14 @@ export function getWhatsAppNumber(
   return digits.length >= 8 && digits.length <= 15 ? digits : null;
 }
 
+/** The six answers the chat collects; a stored `Lead` has all of them too. */
+export type EnquiryDetails = Pick<
+  Lead,
+  "name" | "city" | "projectLink" | "squareFeet" | "phoneNumber"
+> & { requirementType: string };
+
 /** The pre-filled message (master prompt §25 structure). */
-export function buildWhatsAppMessage(lead: Lead): string {
+export function buildWhatsAppMessage(lead: EnquiryDetails): string {
   return [
     "Hello SLORA,",
     "",
@@ -38,7 +44,7 @@ export function buildWhatsAppMessage(lead: Lead): string {
 
 /** `https://wa.me/<number>?text=<encoded message>`, or null if no number is configured. */
 export function buildWhatsAppUrl(
-  lead: Lead,
+  lead: EnquiryDetails,
   number: string | null = getWhatsAppNumber(),
 ): string | null {
   if (!number) return null;

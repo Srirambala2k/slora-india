@@ -15,12 +15,15 @@ export interface ContactLinks {
 
 const GREETING = "Hi SLORA, I'd like to know more about your services.";
 
-export function contactLinks(number: string | null = getWhatsAppNumber()): ContactLinks {
+export function contactLinks(
+  number: string | null = getWhatsAppNumber(),
+  message: string = GREETING,
+): ContactLinks {
   if (!number) return { display: null, telHref: null, whatsappHref: null };
   const parsed = parsePhoneNumberFromString(`+${number}`);
   return {
     display: parsed?.isValid() ? parsed.formatInternational() : `+${number}`,
     telHref: `tel:+${number}`,
-    whatsappHref: `https://wa.me/${number}?text=${encodeURIComponent(GREETING)}`,
+    whatsappHref: `https://wa.me/${number}?text=${encodeURIComponent(message)}`,
   };
 }

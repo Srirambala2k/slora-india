@@ -4,11 +4,14 @@ import Image from "next/image";
 import { useRef, type CSSProperties } from "react";
 import { VideoSlot } from "@/components/media/VideoSlot";
 import { WatermarkCover } from "@/components/media/WatermarkCover";
+import { SPORT_PANELS } from "@/data/sports";
+import { sportsFor } from "@/data/surfaceSports";
 import type { SurfaceCard } from "@/data/surfaces";
 import { askAboutCard } from "@/lib/cards/enquiry";
 import { wordScale, wordScaleNarrow } from "@/lib/cards/carousel";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useReducedMotion } from "@/lib/hooks/useMediaQuery";
+import { goToCrossLink, sportHash } from "@/lib/links/crossLink";
 import styles from "./EditorialCard.module.css";
 
 interface EditorialCardProps {
@@ -29,7 +32,14 @@ interface EditorialCardProps {
  * Pointer effects run only with a real mouse; touch screens see the finished state, and
  * reduced-motion visitors get no movement.
  */
-const COURT_TONES = { blue: styles.courtBlue, teal: styles.courtTeal, clay: styles.courtClay };
+const COURT_TONES = {
+  blue: styles.courtBlue,
+  teal: styles.courtTeal,
+  clay: styles.courtClay,
+  wood: styles.courtWood,
+  synthetic: styles.courtSynthetic,
+  steel: styles.courtSteel,
+};
 
 export function EditorialCard({ card, placeholders = false, eager = false }: EditorialCardProps) {
   const rootRef = useRef<HTMLElement>(null);
@@ -138,6 +148,10 @@ export function EditorialCard({ card, placeholders = false, eager = false }: Edi
 
   const specText = card.spec?.value ?? (placeholders ? "[ VERIFIED SPEC ]" : null);
   const areaText = card.area?.value ?? (placeholders ? "[ AREA ]" : null);
+  // CR-1: the sports this surface is played on (`[]` for a service card, e.g. maintenance).
+  const sports = sportsFor(card.id)
+    .map((id) => SPORT_PANELS.find((panel) => panel.id === id))
+    .filter((panel) => panel !== undefined);
 
   return (
     <article
@@ -216,6 +230,25 @@ export function EditorialCard({ card, placeholders = false, eager = false }: Edi
         <button type="button" className={styles.connect} onClick={() => askAboutCard(card)}>
           Connect with us
         </button>
+        {sports.length > 0 && (
+          <div className={styles.sports}>
+            <p className={`${styles.mono} ${styles.sportsLabel}`}>
+              PLAYED HERE · TO BE CONFIRMED BY SLORA
+            </p>
+            <div className={styles.sportsChips}>
+              {sports.map((sport) => (
+                <button
+                  key={sport.id}
+                  type="button"
+                  className={styles.sportChip}
+                  onClick={() => goToCrossLink(sportHash(sport.id))}
+                >
+                  {sport.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
       {areaText && <p className={`${styles.mono} ${styles.area}`}>{areaText}</p>}
 

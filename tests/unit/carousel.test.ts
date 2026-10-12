@@ -19,6 +19,16 @@ describe("giant word sizing", () => {
     expect(wordScale(["Shuttle", "court"])).toBeLessThan(wordScale(["Pickle", "ball"]));
   });
 
+  it("fits every CR-1 material card's giant word too (checked individually: these are new, easy to get wrong)", () => {
+    expect(wordScale(["Astro", "turf"])).toBeCloseTo(0.92, 2);
+    expect(wordScale(["Acrylic", "court"])).toBeCloseTo(0.66, 2);
+    expect(wordScale(["Vinyl", "court"])).toBeCloseTo(0.84, 2);
+    expect(wordScale(["Rubber", "track"])).toBeCloseTo(0.77, 2);
+    expect(wordScale(["Wood", "court"])).toBeCloseTo(0.84, 2);
+    expect(wordScale(["PU", "court"])).toBeCloseTo(0.84, 2);
+    expect(wordScale(["Resur", "face"])).toBeCloseTo(0.92, 2);
+  });
+
   it("counts the lower line as longer, because it sits where the slab is (SETUP must not be hidden)", () => {
     // "PARK" alone would be full size, but "SETUP" underneath needs room
     expect(wordScale(["Park", "setup"])).toBeCloseTo(0.84, 2);
@@ -72,19 +82,21 @@ describe("stepping through the cards", () => {
   });
 });
 
-describe("the surface cards", () => {
-  it("has the football card first, then pickleball, shuttle court, park setup and basketball", () => {
+describe("the surface cards (CR-1, 2026-09-24: rebuilt as materials, not sports)", () => {
+  it("has the seven materials, artificial turf first, maintenance & resurfacing last", () => {
     expect(SURFACE_CARDS.map((card) => card.id)).toEqual([
-      "football",
-      "pickleball",
-      "shuttle",
-      "park",
-      "basketball",
+      "artificial-turf",
+      "acrylic",
+      "sports-vinyl",
+      "rubber-epdm",
+      "wooden",
+      "synthetic-pu",
+      "maintenance-resurfacing",
     ]);
   });
 
-  it("numbers the cards 01…05 in order with unique ids and readable labels", () => {
-    expect(SURFACE_CARDS.map((card) => card.n)).toEqual(["01", "02", "03", "04", "05"]);
+  it("numbers the cards 01…07 in order with unique ids and readable labels", () => {
+    expect(SURFACE_CARDS.map((card) => card.n)).toEqual(["01", "02", "03", "04", "05", "06", "07"]);
     expect(new Set(SURFACE_CARDS.map((card) => card.id)).size).toBe(SURFACE_CARDS.length);
     for (const card of SURFACE_CARDS) expect(card.label.length).toBeGreaterThan(3);
   });
@@ -96,27 +108,47 @@ describe("the surface cards", () => {
     }
   });
 
-  it("only turf cards show the turf layer names; court cards do not claim a build-up", () => {
+  it("only the turf card shows the turf layer names; every other card is a plain tinted court, no claimed build-up", () => {
     const kinds = Object.fromEntries(SURFACE_CARDS.map((card) => [card.id, card.slab.kind]));
     expect(kinds).toEqual({
-      football: "turf",
-      pickleball: "court",
-      shuttle: "court",
-      park: "turf",
-      basketball: "court",
+      "artificial-turf": "turf",
+      acrylic: "court",
+      "sports-vinyl": "court",
+      "rubber-epdm": "court",
+      wooden: "court",
+      "synthetic-pu": "court",
+      "maintenance-resurfacing": "court",
     });
   });
 
-  it("only the football card has real matching video footage; the rest stay stills", () => {
+  it("only artificial turf has real matching video footage; the rest stay stills", () => {
     const withVideo = SURFACE_CARDS.filter((card) => card.video).map((card) => card.id);
-    expect(withVideo).toEqual(["football"]);
+    expect(withVideo).toEqual(["artificial-turf"]);
   });
 
-  it("pre-fills the enquiry only where a card matches a real enquiry type exactly", () => {
+  it("pre-fills 'Sports Flooring' for every flooring card, and nothing for turf (ambiguous) or the maintenance service", () => {
     const prefilled = SURFACE_CARDS.filter((card) => card.requirement).map((card) => [
       card.id,
       card.requirement,
     ]);
-    expect(prefilled).toEqual([["football", "Football Turf"]]);
+    expect(prefilled).toEqual([
+      ["acrylic", "Sports Flooring"],
+      ["sports-vinyl", "Sports Flooring"],
+      ["rubber-epdm", "Sports Flooring"],
+      ["wooden", "Sports Flooring"],
+      ["synthetic-pu", "Sports Flooring"],
+    ]);
+    expect(SURFACE_CARDS.find((c) => c.id === "artificial-turf")?.requirement).toBeUndefined();
+    expect(
+      SURFACE_CARDS.find((c) => c.id === "maintenance-resurfacing")?.requirement,
+    ).toBeUndefined();
+  });
+
+  it("the maintenance service's whole-card link goes to Contact, not Sports (it has no sports row)", () => {
+    const maintenance = SURFACE_CARDS.find((c) => c.id === "maintenance-resurfacing")!;
+    expect(maintenance.href).toBe("#contact");
+    for (const card of SURFACE_CARDS) {
+      if (card.id !== "maintenance-resurfacing") expect(card.href).toBe("#sports");
+    }
   });
 });

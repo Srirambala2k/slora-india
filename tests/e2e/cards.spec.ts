@@ -21,32 +21,35 @@ async function openDeck(page: Page): Promise<Locator> {
 /** The one card that is not `inert` (the one you can see, focus and hear). */
 const current = (deck: Locator) => deck.locator("[aria-roledescription='slide']:not([inert])");
 
+// CR-1 (2026-09-24): the deck is now material-based (was named after a sport before).
 const NAMES = [
-  "Football turf",
-  "Pickleball court",
-  "Shuttle court",
-  "Park setup",
-  "Basketball court",
+  "Artificial turf",
+  "Acrylic flooring",
+  "Sports vinyl",
+  "Rubber / EPDM",
+  "Wooden flooring",
+  "Synthetic (PU)",
+  "Maintenance & resurfacing",
 ];
 
 test.describe("surface cards: the arrow on the right", () => {
-  test("starts on football, and the right arrow goes through pickleball, shuttle court, park setup and basketball, then back to football", async ({
+  test("starts on artificial turf, and the right arrow goes through the rest of the materials, then back to turf", async ({
     page,
   }) => {
     const deck = await openDeck(page);
-    await expect(deck.locator("[aria-roledescription='slide']")).toHaveCount(5);
+    await expect(deck.locator("[aria-roledescription='slide']")).toHaveCount(7);
     await expect(current(deck)).toHaveCount(1);
-    await expect(current(deck)).toHaveAttribute("aria-label", `1 of 5: ${NAMES[0]}`);
+    await expect(current(deck)).toHaveAttribute("aria-label", `1 of 7: ${NAMES[0]}`);
 
     const next = deck.getByRole("button", { name: /^Next:/ });
-    for (let step = 1; step <= 4; step++) {
+    for (let step = 1; step <= 6; step++) {
       await expect(next).toHaveAccessibleName(`Next: ${NAMES[step]}`); // says where it goes
       await next.click();
-      await expect(current(deck)).toHaveAttribute("aria-label", `${step + 1} of 5: ${NAMES[step]}`);
+      await expect(current(deck)).toHaveAttribute("aria-label", `${step + 1} of 7: ${NAMES[step]}`);
     }
     // after the last card it wraps round to the first
     await next.click();
-    await expect(current(deck)).toHaveAttribute("aria-label", `1 of 5: ${NAMES[0]}`);
+    await expect(current(deck)).toHaveAttribute("aria-label", `1 of 7: ${NAMES[0]}`);
   });
 
   test("the card that is shown really slides into view (and the others are out of the way)", async ({
@@ -66,7 +69,7 @@ test.describe("surface cards: the arrow on the right", () => {
       )
       .toBeLessThan(2);
     // a clear headline for the card, for screen readers
-    await expect(slide.getByRole("heading", { level: 3, name: "Pickleball court" })).toBeAttached();
+    await expect(slide.getByRole("heading", { level: 3, name: "Acrylic flooring" })).toBeAttached();
   });
 
   test("the back arrow appears only after moving on, and returns to the previous card", async ({
@@ -76,10 +79,10 @@ test.describe("surface cards: the arrow on the right", () => {
     // hidden from assistive technology while there is nothing to go back to
     await expect(deck.getByRole("button", { name: /^Previous/ })).toHaveCount(0);
     await deck.getByRole("button", { name: /^Next:/ }).click();
-    const back = deck.getByRole("button", { name: /^Previous: Football turf/ });
+    const back = deck.getByRole("button", { name: /^Previous: Artificial turf/ });
     await expect(back).toBeVisible();
     await back.click();
-    await expect(current(deck)).toHaveAttribute("aria-label", `1 of 5: ${NAMES[0]}`);
+    await expect(current(deck)).toHaveAttribute("aria-label", `1 of 7: ${NAMES[0]}`);
   });
 
   test("the names underneath jump straight to a card, and the keyboard's arrow keys move too", async ({
@@ -87,19 +90,18 @@ test.describe("surface cards: the arrow on the right", () => {
     isMobile,
   }) => {
     const deck = await openDeck(page);
-    await deck.getByRole("button", { name: "Show Basketball court" }).click();
-    await expect(current(deck)).toHaveAttribute("aria-label", `5 of 5: ${NAMES[4]}`);
-    await expect(deck.getByRole("button", { name: "Show Basketball court" })).toHaveAttribute(
-      "aria-current",
-      "true",
-    );
+    await deck.getByRole("button", { name: "Show Maintenance & resurfacing" }).click();
+    await expect(current(deck)).toHaveAttribute("aria-label", `7 of 7: ${NAMES[6]}`);
+    await expect(
+      deck.getByRole("button", { name: "Show Maintenance & resurfacing" }),
+    ).toHaveAttribute("aria-current", "true");
 
     test.skip(isMobile, "arrow keys are for keyboards");
     await deck.getByRole("button", { name: /^Next:/ }).focus();
     await page.keyboard.press("ArrowLeft");
-    await expect(current(deck)).toHaveAttribute("aria-label", `4 of 5: ${NAMES[3]}`);
+    await expect(current(deck)).toHaveAttribute("aria-label", `6 of 7: ${NAMES[5]}`);
     await page.keyboard.press("ArrowRight");
-    await expect(current(deck)).toHaveAttribute("aria-label", `5 of 5: ${NAMES[4]}`);
+    await expect(current(deck)).toHaveAttribute("aria-label", `7 of 7: ${NAMES[6]}`);
   });
 
   test("only the card in view can be reached by keyboard, and it announces itself when it changes", async ({
@@ -113,10 +115,10 @@ test.describe("surface cards: the arrow on the right", () => {
           .filter((link) => !link.closest("[inert]"))
           .map((link) => link.getAttribute("aria-label")),
       );
-    expect(await reachableLinks()).toEqual(["Football turf: explore"]);
+    expect(await reachableLinks()).toEqual(["Artificial turf: explore"]);
     await deck.getByRole("button", { name: /^Next:/ }).click();
-    await expect.poll(reachableLinks).toEqual(["Pickleball court: explore"]);
-    await expect(deck.locator("[aria-live='polite']")).toHaveText("Pickleball court, 2 of 5");
+    await expect.poll(reachableLinks).toEqual(["Acrylic flooring: explore"]);
+    await expect(deck.locator("[aria-live='polite']")).toHaveText("Acrylic flooring, 2 of 7");
 
     // and pressing Tab really never lands inside a card that is out of view
     await deck.getByRole("button", { name: /^Next:/ }).focus();
@@ -140,7 +142,7 @@ test.describe("surface cards: the arrow on the right", () => {
             .locator("img")
             .evaluateAll(
               (images) =>
-                images.length === 5 &&
+                images.length === 7 &&
                 images.every((img) => (img as HTMLImageElement).naturalWidth > 0),
             ),
         { timeout: 15_000 },
@@ -163,43 +165,91 @@ test.describe("surface cards: Connect with us", () => {
   }) => {
     test.slow(); // the frosted-glass chat is very slow to draw in software GL, opened twice here
     const deck = await openDeck(page);
+    // Artificial turf: ambiguous between Football Turf and Cricket Turf — the chat still asks.
     await current(deck).getByRole("button", { name: "Connect with us" }).click();
     const chat = page.getByRole("dialog", { name: "SLORA enquiry chat" });
     await slowly(chat).toBeVisible();
-    await slowly(chat.getByText(/Thanks for showing interest in Football turf/)).toBeVisible();
+    await slowly(chat.getByText(/Thanks for showing interest in Artificial turf/)).toBeVisible();
     const box = chat.getByRole("textbox");
+    // the chat always starts from the name; wait for each question before answering it
+    await slowly(chat.getByText("What is your name?")).toBeVisible();
     await box.fill("Asha Raman");
     await box.press("Enter");
-    await box.fill("Chennai");
-    await box.press("Enter");
-    // Football matches an enquiry type exactly, so that question is skipped
-    await slowly(chat.getByText(/site or project link/i)).toBeVisible();
-    await expect(chat.getByText("What are you looking to build?")).toHaveCount(0);
-    await page.keyboard.press("Escape");
-
-    // Pickleball has no exact match: the greeting still names it, but the chat still asks
-    await deck.getByRole("button", { name: /^Next:/ }).click();
-    await current(deck).getByRole("button", { name: "Connect with us" }).click();
-    await slowly(chat.getByText(/Thanks for showing interest in Pickleball court/)).toBeVisible();
-    await box.fill("Asha Raman");
-    await box.press("Enter");
+    await slowly(chat.getByText("Which city is your project in?")).toBeVisible();
     await box.fill("Chennai");
     await box.press("Enter");
     await slowly(chat.getByText("What are you looking to build?")).toBeVisible();
+    await page.keyboard.press("Escape");
+
+    // Acrylic flooring matches "Sports Flooring" exactly, so that question is skipped.
+    await deck.getByRole("button", { name: /^Next:/ }).click();
+    await current(deck).getByRole("button", { name: "Connect with us" }).click();
+    await slowly(chat.getByText(/Thanks for showing interest in Acrylic flooring/)).toBeVisible();
+    await slowly(chat.getByText("What is your name?")).toBeVisible();
+    await box.fill("Asha Raman");
+    await box.press("Enter");
+    await slowly(chat.getByText("Which city is your project in?")).toBeVisible();
+    await box.fill("Chennai");
+    await box.press("Enter");
+    await slowly(chat.getByText(/site or project link/i)).toBeVisible();
+    await expect(chat.getByText("What are you looking to build?")).toHaveCount(0);
   });
 
   test("clicking elsewhere on the card still follows the card's own link", async ({ page }) => {
     const deck = await openDeck(page);
-    await current(deck).getByRole("link", { name: "Football turf: explore" }).click();
+    await current(deck).getByRole("link", { name: "Artificial turf: explore" }).click();
     await expect
       .poll(() =>
         page.evaluate(() => document.getElementById("sports")!.getBoundingClientRect().top),
       )
       .toBeLessThan(200);
   });
+
+  test("the maintenance card's whole-card link goes to Contact instead — it is a service, not a surface", async ({
+    page,
+  }) => {
+    const deck = await openDeck(page);
+    await deck.getByRole("button", { name: "Show Maintenance & resurfacing" }).click();
+    await current(deck).getByRole("link", { name: "Maintenance & resurfacing: explore" }).click();
+    await expect
+      .poll(() =>
+        page.evaluate(() => document.getElementById("contact")!.getBoundingClientRect().top),
+      )
+      .toBeLessThan(200);
+  });
 });
 
-test.describe("surface cards: the football card's background video", () => {
+test.describe("surface cards: CR-1 'played here' sports chips", () => {
+  test("show the sports a surface is played on, marked as unconfirmed, and none at all on the maintenance service card", async ({
+    page,
+  }) => {
+    const deck = await openDeck(page);
+    const card = current(deck);
+    await expect(card.getByText(/PLAYED HERE.*TO BE CONFIRMED BY SLORA/i)).toBeVisible();
+    // Artificial turf → football, cricket, padel, multi-sport (data/surfaceSports.ts)
+    for (const sport of ["Football", "Cricket", "Padel", "Multi-sport"]) {
+      await expect(card.getByRole("button", { name: sport, exact: true })).toBeVisible();
+    }
+
+    await deck.getByRole("button", { name: "Show Maintenance & resurfacing" }).click();
+    await expect(card.getByText(/PLAYED HERE/i)).toHaveCount(0);
+  });
+
+  test("clicking a sport chip lands on that sport in the Sports section, with the address bar reflecting it", async ({
+    page,
+  }) => {
+    const deck = await openDeck(page);
+    await current(deck).getByRole("button", { name: "Multi-sport", exact: true }).click();
+    await expect.poll(() => page.evaluate(() => location.hash)).toBe("#sports/multi-sport");
+    const sportsSection = page.locator("#sports");
+    await expect
+      .poll(() => sportsSection.evaluate((el) => el.getBoundingClientRect().top < 300))
+      .toBe(true);
+    await expect(page.getByRole("heading", { level: 3, name: "Multi-sport" })).toBeVisible();
+  });
+});
+
+test.describe("surface cards: the artificial turf card's background video", () => {
   test("plays real football footage instead of a still, with the watermark still covered", async ({
     page,
   }) => {
@@ -235,7 +285,7 @@ test.describe("surface cards: reduced motion", () => {
   test("the arrow still works, and the card simply changes", async ({ page }) => {
     const deck = await openDeck(page);
     await deck.getByRole("button", { name: /^Next:/ }).click();
-    await expect(current(deck)).toHaveAttribute("aria-label", `2 of 5: ${NAMES[1]}`);
+    await expect(current(deck)).toHaveAttribute("aria-label", `2 of 7: ${NAMES[1]}`);
     await expect
       .poll(
         async () => {

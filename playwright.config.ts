@@ -1,6 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const PORT = 3000;
+const PORT = Number(process.env.E2E_PORT ?? 3000); // set E2E_PORT when something else holds 3000
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -32,7 +32,7 @@ export default defineConfig({
   ],
   webServer: {
     // CI builds first (see .github/workflows/ci.yml) and serves the production build.
-    command: process.env.CI ? "npm run start" : "npm run dev",
+    command: process.env.CI ? "npm run start" : `npm run dev -- -p ${PORT}`,
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

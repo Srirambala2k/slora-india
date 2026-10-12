@@ -44,7 +44,6 @@ describe("leadInputSchema — valid enquiries", () => {
       "Football Turf",
       "Cricket Turf",
       "Sports Flooring",
-      "Landscape",
       "Playground",
       "Stadium",
       "Multi-Sport",

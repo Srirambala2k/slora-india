@@ -40,9 +40,9 @@ describe("asking about a sport", () => {
   });
 
   it("never wipes an answer the visitor chose themselves in the chat", () => {
-    prefill({ requirementType: "Landscape" }); // chosen by the visitor, not by a panel
+    prefill({ requirementType: "Stadium" }); // chosen by the visitor, not by a panel
     askAboutSport(undefined);
-    expect(getDraft().requirementType).toBe("Landscape");
+    expect(getDraft().requirementType).toBe("Stadium");
   });
 
   it("keeps the other answers already given", () => {

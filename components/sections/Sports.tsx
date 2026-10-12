@@ -3,9 +3,12 @@
 import Image from "next/image";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { SPORT_PANELS, type SportPanel } from "@/data/sports";
+import { SURFACE_CARDS } from "@/data/surfaces";
+import { surfacesFor } from "@/data/surfaceSports";
 import { useCapability, useRailOverride } from "@/lib/device/capability";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { useMediaQuery, useReducedMotion } from "@/lib/hooks/useMediaQuery";
+import { goToCrossLink, surfaceHash, useCrossLinkTarget } from "@/lib/links/crossLink";
 import { getLenis } from "@/lib/scroll/lenis";
 import { askAboutSport } from "@/lib/sports/enquiry";
 import {
@@ -231,6 +234,47 @@ function SportsStage({ pinned, reduced }: { pinned: boolean; reduced: boolean })
     { scope: wrapRef, dependencies: [pinned] },
   );
 
+  /* CR-1: a surface card's "played here" chip lands here, on a specific sport (`#sports/<id>`).
+     Declared after the two effects above, so its own focus handler (pinned mode) is already
+     attached by the time this one can possibly run. */
+  const sportTarget = useCrossLinkTarget("sports");
+  useEffect(() => {
+    if (!sportTarget) return;
+    const index = SPORT_PANELS.findIndex((panel) => panel.id === sportTarget);
+    const panel = trackRef.current?.children[index] as HTMLElement | undefined;
+    const button = panel?.querySelector<HTMLElement>("button");
+    if (index < 0 || !panel || !button) return;
+    // Landing on the panel (moving the row, scrolling the page and moving focus there) is one
+    // user-visible action driven by an event elsewhere on the page, not React state mirroring
+    // a prop — so, as elsewhere in this file, it only ever runs from a callback.
+    const land = () => {
+      setActive(index);
+      if (pinned) {
+        button.focus(); // the pinned rail's own focusin handler (above) then scrolls to it
+      } else {
+        panel.scrollIntoView({
+          inline: "center",
+          block: "nearest",
+          behavior: reduced ? "auto" : "smooth",
+        });
+        button.focus({ preventScroll: true });
+      }
+    };
+    if (pinned) {
+      requestAnimationFrame(land);
+      return;
+    }
+    const wrap = wrapRef.current;
+    const lenis = getLenis();
+    // offset: the header is `position: fixed`, so landing exactly at the top would tuck the
+    // section's own top edge underneath it
+    if (lenis && wrap) lenis.scrollTo(wrap, { offset: -96, onComplete: land });
+    else {
+      wrap?.scrollIntoView({ behavior: "auto", block: "start" });
+      requestAnimationFrame(land);
+    }
+  }, [sportTarget, pinned, reduced]);
+
   const step = (direction: 1 | -1) => {
     const rail = railRef.current;
     const first = trackRef.current?.firstElementChild as HTMLElement | undefined;
@@ -319,6 +363,10 @@ function Panel({
     "--len": longest,
     "--cap": panel.word.length === 1 ? 22 : 10,
   } as CSSProperties;
+  // CR-1: the surfaces this sport is played on (every sport has at least one — unit-tested).
+  const surfaces = surfacesFor(panel.id)
+    .map((id) => SURFACE_CARDS.find((card) => card.id === id))
+    .filter((card) => card !== undefined);
   return (
     <li
       className={styles.panel}
@@ -366,6 +414,25 @@ function Panel({
         >
           Ask about {panel.name} <span aria-hidden="true">→</span>
         </button>
+        {surfaces.length > 0 && (
+          <div className={styles.surfaces}>
+            <p className={`${styles.fact} ${styles.surfacesLabel}`}>
+              PLAYED ON · TO BE CONFIRMED BY SLORA
+            </p>
+            <div className={styles.surfaceChips}>
+              {surfaces.map((surface) => (
+                <button
+                  key={surface.id}
+                  type="button"
+                  className={styles.surfaceChip}
+                  onClick={() => goToCrossLink(surfaceHash(surface.id))}
+                >
+                  {surface.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </li>
   );

@@ -79,7 +79,7 @@ export default function SpecimenPage() {
           />
           <div className={s.heroShade} />
           <p className={`${s.mono} ${s.heroMetaTop}`}>
-            01 SURFACES · 02 SPORTS · 03 LANDSCAPE · 04 PROJECTS · 05 PROCESS · 06 CONTACT
+            01 SURFACES · 02 SPORTS · 03 PROJECTS · 04 PROCESS · 05 CONTACT
           </p>
           <div className={s.heroType} role="img" aria-label="We build the ground you move on.">
             <span className={s.heroHeavy}>We build</span>

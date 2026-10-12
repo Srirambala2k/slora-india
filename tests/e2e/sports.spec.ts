@@ -8,7 +8,18 @@ const waitForReady = (page: Page) =>
 /** The frosted-glass chat is very slow to draw in software graphics, so its checks wait longer. */
 const slowly = expect.configure({ timeout: 30_000 });
 
-const NAMES = ["Football", "Cricket", "Hockey", "Tennis", "Padel", "Multi-sport", "Athletics"];
+// CR-1 (2026-09-24): three more added — Badminton, Basketball, Pickleball — after the brief's seven.
+const NAMES = [
+  "Football",
+  "Cricket",
+  "Tennis",
+  "Padel",
+  "Multi-sport",
+  "Athletics",
+  "Badminton",
+  "Basketball",
+  "Pickleball",
+];
 
 async function openHome(page: Page, extra = ""): Promise<Locator> {
   await page.goto(`/?journey=light${extra}`);
@@ -68,14 +79,14 @@ async function pressButton(page: Page, button: Locator) {
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
 }
 
-const counter = (section: Locator) => section.locator("p", { hasText: /^\d\d \/ 07/ });
+const counter = (section: Locator) => section.locator("p", { hasText: /^\d\d \/ 9/ });
 
 test.describe("sports: the pinned rail (desktop)", () => {
   test.beforeEach(({ isMobile }) => {
     test.skip(isMobile, "phones get the swipe cards (next group)");
   });
 
-  test("is a tall pinned stage that slides seven panels sideways, from Football to Athletics", async ({
+  test("is a tall pinned stage that slides nine panels sideways, from Football to Pickleball", async ({
     page,
   }) => {
     const section = await openPinned(page);
@@ -86,15 +97,15 @@ test.describe("sports: the pinned rail (desktop)", () => {
     expect(size.height).toBeGreaterThan(size.vh * 2.5);
 
     await scrollSportsTo(page, 0);
-    await expect(counter(section)).toContainText("01 / 07 · FOOTBALL");
+    await expect(counter(section)).toContainText("01 / 09 · FOOTBALL");
     expect(Math.abs(await rowShift(page))).toBeLessThan(2);
 
     await scrollSportsTo(page, 0.5);
     await expect.poll(() => rowShift(page)).toBeLessThan(-400);
-    await expect(counter(section)).not.toContainText("01 / 07");
+    await expect(counter(section)).not.toContainText("01 / 09");
 
     await scrollSportsTo(page, 1);
-    await expect(counter(section)).toContainText("07 / 07 · ATHLETICS", { timeout: 10_000 });
+    await expect(counter(section)).toContainText("09 / 09 · PICKLEBALL", { timeout: 10_000 });
     // at the end the last panel sits inside the right-hand side of the screen
     await expect
       .poll(async () =>
@@ -107,11 +118,11 @@ test.describe("sports: the pinned rail (desktop)", () => {
       .toBe(true);
   });
 
-  test("shows the seven categories from the brief, in order, and says the pictures are stand-ins", async ({
+  test("shows the nine categories in order, and says the pictures are stand-ins", async ({
     page,
   }) => {
     const section = await openPinned(page);
-    await expect(section.getByRole("heading", { level: 3 })).toHaveCount(7);
+    await expect(section.getByRole("heading", { level: 3 })).toHaveCount(9);
     // (screen readers get the plain name, e.g. "Multi-sport", not the two stacked lines glued together)
     for (const name of NAMES) {
       await expect(section.getByRole("heading", { level: 3, name, exact: true })).toHaveCount(1);
@@ -125,19 +136,17 @@ test.describe("sports: the pinned rail (desktop)", () => {
     await expect(section.getByText(/APPLICATIONS/i)).toHaveCount(0);
   });
 
-  test("the giant word never runs into the tagline below it, even on a short window (Football, Multi-sport)", async ({
+  test("the giant word never runs into the tagline below it, even on a short window (the three two-line words)", async ({
     page,
   }) => {
-    // A two-line word (only Football and Multi-sport have one) is sized from the viewport's
-    // HEIGHT, while the tagline underneath keeps a roughly fixed height — so a window that is
-    // wide enough for the pinned rail but not very tall (a resized or un-maximised browser,
-    // common on laptops) used to let the word's second line run into the tagline text.
+    // A two-line word (Football, the only one left) is sized
+    // from the viewport's HEIGHT, while the tagline underneath keeps a roughly fixed height —
+    // so a window that is wide enough for the pinned rail but not very tall (a resized or
+    // un-maximised browser, common on laptops) used to let the word's second line run into the
+    // tagline text.
     await page.setViewportSize({ width: 1440, height: 650 });
     const section = await openPinned(page);
-    for (const [fraction, name] of [
-      [0, "Football"],
-      [5 / 6, "Multi-sport"],
-    ] as const) {
+    for (const [fraction, name] of [[0, "Football"]] as const) {
       await scrollSportsTo(page, fraction);
       const panel = section.getByRole("heading", { level: 3, name, exact: true }).locator("..");
       const wordBottom = await panel
@@ -178,7 +187,7 @@ test.describe("sports: the pinned rail (desktop)", () => {
   }) => {
     test.slow(); // (as above)
     const section = await openPinned(page);
-    await scrollSportsTo(page, 0.55);
+    await scrollSportsTo(page, 2 / 8); // Tennis is panel index 2 of 9 (CR-1 added three more)
     await pressButton(page, section.getByRole("button", { name: /^Ask about Tennis/ }));
     const chat = page.getByRole("dialog", { name: "SLORA enquiry chat" });
     await slowly(chat).toBeVisible();
@@ -195,7 +204,7 @@ test.describe("sports: the pinned rail (desktop)", () => {
   }) => {
     const section = await openPinned(page);
     await scrollSportsTo(page, 0);
-    await section.getByRole("button", { name: /^Ask about Athletics/ }).focus();
+    await section.getByRole("button", { name: /^Ask about Pickleball/ }).focus();
     await expect
       .poll(async () =>
         page.evaluate(() => {
@@ -228,6 +237,32 @@ test.describe("sports: the pinned rail (desktop)", () => {
     );
     expect(overflow).toBeLessThanOrEqual(0);
   });
+
+  test("CR-1: each panel shows the surfaces it is played on, marked as unconfirmed", async ({
+    page,
+  }) => {
+    const section = await openPinned(page);
+    await scrollSportsTo(page, 0);
+    const football = section
+      .getByRole("heading", { level: 3, name: "Football", exact: true })
+      .locator("..");
+    await expect(football.getByText(/PLAYED ON.*TO BE CONFIRMED BY SLORA/i)).toBeVisible();
+    // Football is played on artificial turf only (data/surfaceSports.ts)
+    await expect(football.getByRole("button", { name: "Artificial turf" })).toBeVisible();
+  });
+
+  test("CR-1: a 'played on' chip lands on that surface, updating the address bar", async ({
+    page,
+  }) => {
+    const section = await openPinned(page);
+    await scrollSportsTo(page, 4 / 8);
+    const multiSport = section
+      .getByRole("heading", { level: 3, name: "Multi-sport", exact: true })
+      .locator("..");
+    await pressButton(page, multiSport.getByRole("button", { name: "Artificial turf" }));
+    await expect.poll(() => page.evaluate(() => location.hash)).toBe("#surfaces/artificial-turf");
+    await expect(page.getByRole("heading", { level: 3, name: "Artificial turf" })).toBeVisible();
+  });
 });
 
 test.describe("sports: swipe cards (phones)", () => {
@@ -235,7 +270,7 @@ test.describe("sports: swipe cards (phones)", () => {
     test.skip(!isMobile, "desktop gets the pinned rail (previous group)");
   });
 
-  test("a row of seven cards that snaps as you swipe, with a counter that follows", async ({
+  test("a row of nine cards that snaps as you swipe, with a counter that follows", async ({
     page,
   }) => {
     const section = await openHome(page);
@@ -247,17 +282,17 @@ test.describe("sports: swipe cards (phones)", () => {
     }));
     expect(facts.snap).toContain("x");
     expect(facts.overflow).toBeGreaterThan(300);
-    await expect(section.getByRole("heading", { level: 3 })).toHaveCount(7);
+    await expect(section.getByRole("heading", { level: 3 })).toHaveCount(9);
 
     // the section is only as tall as its cards, not a giant pinned stage
     const ratio = await section.evaluate((el) => el.getBoundingClientRect().height / innerHeight);
     expect(ratio).toBeLessThan(2);
 
-    await expect(counter(section)).toContainText("01 / 07 · FOOTBALL");
+    await expect(counter(section)).toContainText("01 / 09 · FOOTBALL");
     await section.getByRole("button", { name: "Next sport" }).click();
-    await expect(counter(section)).toContainText("02 / 07 · CRICKET", { timeout: 5000 });
+    await expect(counter(section)).toContainText("02 / 09 · CRICKET", { timeout: 5000 });
     await section.getByRole("button", { name: "Previous sport" }).click();
-    await expect(counter(section)).toContainText("01 / 07 · FOOTBALL", { timeout: 5000 });
+    await expect(counter(section)).toContainText("01 / 09 · FOOTBALL", { timeout: 5000 });
   });
 
   test("the page itself never scrolls sideways", async ({ page }) => {
@@ -284,7 +319,7 @@ test.describe("sports: a computer without a graphics card (desktop)", () => {
     expect(ratio).toBeLessThan(2);
     await section.scrollIntoViewIfNeeded();
     await expect(section.getByRole("button", { name: "Next sport" })).toBeVisible();
-    await expect(section.getByRole("heading", { level: 3 })).toHaveCount(7);
+    await expect(section.getByRole("heading", { level: 3 })).toHaveCount(9);
   });
 });
 
@@ -308,6 +343,6 @@ test.describe("sports: reduced motion (desktop)", () => {
     expect(ratio).toBeLessThan(2);
     await section.scrollIntoViewIfNeeded();
     await section.getByRole("button", { name: "Next sport" }).click();
-    await expect(counter(section)).toContainText("02 / 07 · CRICKET", { timeout: 5000 });
+    await expect(counter(section)).toContainText("02 / 09 · CRICKET", { timeout: 5000 });
   });
 });

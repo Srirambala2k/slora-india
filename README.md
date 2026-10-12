@@ -1,6 +1,6 @@
 # SLORA website
 
-Interactive digital showroom + lead-generation site for SLORA (artificial turf, sports flooring, landscape surfaces).
+Interactive digital showroom + lead-generation site for SLORA (artificial turf and sports flooring surfaces).
 
 - Brief: [master_prompt.md](master_prompt.md) · Plan and progress: [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) (starts with a plain-English progress report)
 - Stack: Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4. GSAP (+ SplitText, ScrollTrigger), Lenis, Three.js / React Three Fiber / drei.

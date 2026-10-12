@@ -9,7 +9,7 @@ let prefilledByPanel: RequirementType | undefined;
  * A sports panel's "ask about …" button: open the enquiry chat.
  *
  * If the panel matches an enquiry type exactly, that answer is filled in so the chat does not
- * ask it again. If it does not (Hockey, Tennis, Padel, Athletics), nothing is guessed: the chat
+ * ask it again. If it does not (Tennis, Padel, Athletics), nothing is guessed: the chat
  * asks. And if an earlier panel filled in a different type that the visitor has not changed
  * since, that is taken back out, so a Tennis enquiry is never recorded as Football.
  */

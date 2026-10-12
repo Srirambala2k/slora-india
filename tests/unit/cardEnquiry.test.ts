@@ -36,9 +36,9 @@ describe('a surface card\'s "Connect with us" button', () => {
   });
 
   it("never wipes an answer the visitor chose themselves in the chat", () => {
-    prefill({ requirementType: "Landscape" });
+    prefill({ requirementType: "Stadium" });
     askAboutCard(pickleball);
-    expect(getDraft().requirementType).toBe("Landscape");
+    expect(getDraft().requirementType).toBe("Stadium");
   });
 
   it("keeps the other answers already given", () => {

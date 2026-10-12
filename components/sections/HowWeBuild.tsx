@@ -170,10 +170,10 @@ function HowStage({ immersive, reduced }: { immersive: boolean; reduced: boolean
         <div className={styles.veil} aria-hidden="true" />
 
         <header className={styles.title}>
-          <p className={styles.eyebrow}>05 · PROCESS</p>
+          <p className={styles.eyebrow}>04 · PROCESS</p>
           <h2 id="process-h" className={styles.heading}>
-            <span className={styles.thin}>how we</span>
-            <span className={styles.heavy}>build</span>
+            <span className={styles.thin}>services we</span>
+            <span className={styles.heavy}>provide</span>
           </h2>
           <div className={styles.actions}>
             <a href="#contact" className={styles.primary}>

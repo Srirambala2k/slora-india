@@ -1,0 +1,238 @@
+/* SERVICES: pinned crossfade on a wide screen with a graphics card, stacked cards elsewhere. */
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.tall {
+  position: relative;
+  width: 100%;
+  border-top: 1px solid var(--slora-line);
+}
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 34rem;
+  overflow: hidden;
+  isolation: isolate;
+  background: #000;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--slora-gold);
+}
+.stage .head {
+  position: absolute;
+  z-index: 4;
+  left: var(--pad);
+  top: clamp(6.5rem, 18svh, 9rem);
+}
+
+/* the pictures: stacked, the later ones fade in on top */
+.pictures {
+  position: absolute;
+  inset: 0;
+  /* its own stacking layer, so the overlay inside it stays UNDER the words */
+  z-index: 1;
+  isolation: isolate;
+}
+.picture {
+  position: absolute;
+  inset: 0;
+  will-change: opacity, transform;
+}
+.picture:not(:first-child) {
+  opacity: 0;
+}
+.img {
+  object-fit: cover;
+}
+.veil {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgb(0 0 0 / 0.82) 0%, rgb(0 0 0 / 0.55) 45%, rgb(0 0 0 / 0.12) 100%),
+    linear-gradient(0deg, rgb(0 0 0 / 0.6) 0%, transparent 32%);
+}
+
+/* the words: every block sits in the same place; the section fades them in and out */
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.stage .step {
+  position: absolute;
+  z-index: 5;
+  left: var(--pad);
+  top: 50%;
+  width: min(36rem, 46vw);
+  margin-top: -9rem;
+  will-change: opacity, transform;
+}
+.stage .step:not(:first-child) {
+  opacity: 0;
+  visibility: hidden;
+}
+.words {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.num {
+  font-family: var(--slora-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: var(--slora-gold);
+}
+.title {
+  margin: 0;
+  font-family: var(--slora-font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(1.8rem, 3.6vw, 3.6rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  color: var(--slora-paper);
+}
+.rule {
+  display: block;
+  width: 4rem;
+  height: 1px;
+  background: var(--slora-gold);
+}
+.text {
+  margin: 0;
+  font-family: var(--slora-font-sans);
+  font-weight: 300;
+  font-size: clamp(1rem, 1.35vw, 1.3rem);
+  line-height: 1.55;
+  color: rgb(245 245 243 / 0.86);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+.primary,
+.secondary {
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+/* solid gold by default (hover only moves it), like the other discrete buttons */
+.primary {
+  border: none;
+  background: var(--slora-gold);
+  color: var(--slora-ink);
+}
+/* beside a gold primary: a lighter, permanent gold tint keeps the hierarchy */
+.secondary {
+  border: 1px solid var(--slora-gold);
+  background: rgb(217 164 65 / 0.14);
+  color: var(--slora-paper);
+}
+.primary:hover,
+.secondary:hover {
+  transform: translateY(-2px);
+}
+.primary:focus-visible,
+.secondary:focus-visible {
+  outline: 2px solid var(--slora-paper);
+  outline-offset: 2px;
+}
+
+.progress {
+  position: absolute;
+  z-index: 5;
+  left: var(--pad);
+  right: var(--pad);
+  bottom: 2.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.count {
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--slora-gold);
+}
+.track {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: rgb(245 245 243 / 0.2);
+}
+.bar {
+  position: absolute;
+  inset: 0;
+  background: var(--slora-gold);
+  transform-origin: left;
+  transform: scaleX(0);
+}
+.note {
+  margin: 0;
+  font-family: var(--slora-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: rgb(245 245 243 / 0.4);
+}
+.stage .note {
+  position: absolute;
+  z-index: 5;
+  left: var(--pad);
+  bottom: 1rem;
+}
+
+/* ── the stacked version: phones, no graphics card, reduced motion ───────────────────────── */
+.simple {
+  border-top: 1px solid var(--slora-line);
+  padding: clamp(4rem, 10svh, 6rem) var(--pad);
+}
+.simpleStage {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 44rem;
+  margin: 0 auto;
+}
+.simpleStage .steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.simpleStage .step {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--slora-line);
+  border-radius: 4px;
+  background: #0b0b0b;
+}
+.cardPicture {
+  position: relative;
+  aspect-ratio: 16 / 9;
+}
+.simpleStage .words {
+  padding: 1.25rem 1.25rem 1.5rem;
+}

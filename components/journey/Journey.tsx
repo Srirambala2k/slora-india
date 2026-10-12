@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { SurfaceFallback } from "@/components/journey/SurfaceFallback";
 import { VideoSlot } from "@/components/media/VideoSlot";
+import { JourneyActions } from "@/components/journey/JourneyActions";
 import { ContactPopover } from "@/components/contact/ContactPopover";
 import { InstagramLink } from "@/components/contact/InstagramLink";
 import { LAYERS } from "@/data/turf";
@@ -253,9 +254,11 @@ function JourneyStage({ mode }: { mode: JourneyMode | null }) {
         marker.style.top = `${descentProgress(p, mode) * 100}%`;
         const go = groundLineOpacity(p, mode);
         groundLine.style.opacity = String(go);
+        groundLine.style.visibility = go > 0.02 ? "visible" : "hidden"; // no clicking what is invisible
         groundLine.style.transform = `translateY(${(1 - go) * 18}px)`;
         const so = statementOpacity(p, mode);
         statement.style.opacity = String(so);
+        statement.style.visibility = so > 0.02 ? "visible" : "hidden";
         statement.style.transform = `translateY(${(1 - so) * 26}px)`;
 
         if (turfBox && turfShade && note) {
@@ -351,7 +354,7 @@ function JourneyStage({ mode }: { mode: JourneyMode | null }) {
             entrance animation fades in, so the two never fight over the same opacity. */}
         <div className={styles.taglineBox} data-tagline>
           <p className={styles.tagline} data-meta>
-            ARTIFICIAL TURF · SPORTS FLOORING · LANDSCAPE SURFACES
+            ARTIFICIAL TURF · SPORTS FLOORING · SURFACE SOLUTIONS
           </p>
           <div className={styles.heroActions} data-meta>
             <ContactPopover openUpward />
@@ -397,6 +400,7 @@ function JourneyStage({ mode }: { mode: JourneyMode | null }) {
                 on the depth gauge — gone again well before the statement below appears */}
             <div className={styles.groundLine} data-ground-line>
               <p className={styles.groundLineText}>Every Game Begins with the Ground</p>
+              <JourneyActions />
             </div>
 
             <div className={styles.statement} data-statement>
@@ -404,6 +408,7 @@ function JourneyStage({ mode }: { mode: JourneyMode | null }) {
               <p className={styles.statementText}>
                 creates surfaces where people move, play and experience space.
               </p>
+              <JourneyActions />
             </div>
           </>
         )}

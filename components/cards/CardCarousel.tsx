@@ -6,6 +6,8 @@ import type { SurfaceCard } from "@/data/surfaces";
 import { directionBetween, nextIndex, prevIndex } from "@/lib/cards/carousel";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useReducedMotion } from "@/lib/hooks/useMediaQuery";
+import { useCrossLinkTarget } from "@/lib/links/crossLink";
+import { getLenis } from "@/lib/scroll/lenis";
 import styles from "./CardCarousel.module.css";
 
 /** Circumference of the progress ring drawn around the arrow (radius 43). */
@@ -61,6 +63,35 @@ export function CardCarousel({ cards, label, note }: CardCarouselProps) {
     near.observe(root);
     return () => near.disconnect();
   }, []);
+
+  /* CR-1: a sport panel's "played on" chip lands here on a specific card (`#surfaces/<id>`). */
+  const surfaceTarget = useCrossLinkTarget("surfaces");
+  useEffect(() => {
+    if (!surfaceTarget) return;
+    const targetIndex = cards.findIndex((card) => card.id === surfaceTarget);
+    if (targetIndex < 0) return;
+    const root = rootRef.current;
+    // Landing on the card (moving the deck, scrolling the page and moving focus there) is one
+    // user-visible action driven by an external event (a chip clicked elsewhere on the page),
+    // not React state simply mirroring a prop — so it happens from a callback,
+    // matching how the rest of this file only ever calls `setIndex` from a real event handler.
+    const land = () => {
+      goTo(targetIndex);
+      const slide = trackRef.current?.children[targetIndex] as HTMLElement | undefined;
+      slide?.querySelector<HTMLElement>("a")?.focus({ preventScroll: true });
+    };
+    const lenis = getLenis();
+    // offset: the header is `position: fixed`, so landing exactly at the top would tuck the
+    // card's own top edge underneath it
+    if (lenis && root) lenis.scrollTo(root, { offset: -96, onComplete: land });
+    else {
+      root?.scrollIntoView({ behavior: "auto", block: "start" });
+      requestAnimationFrame(land);
+    }
+    // `cards` is a static prop in practice (one fixed deck); re-running this every render it
+    // happens to change would re-trigger the scroll, which is not wanted.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [surfaceTarget]);
 
   /* Move the track, and bring the newcomer's giant word, picture and slab in. */
   useGSAP(

@@ -85,15 +85,17 @@ describe("skew and parallax", () => {
 });
 
 describe("the sports panels", () => {
-  it("are the seven categories from the brief, in order", () => {
+  it("are the brief's seven categories, in order, plus three added for CR-1 (2026-09-24)", () => {
     expect(SPORT_PANELS.map((panel) => panel.name)).toEqual([
       "Football",
       "Cricket",
-      "Hockey",
       "Tennis",
       "Padel",
       "Multi-sport",
       "Athletics",
+      "Badminton",
+      "Basketball",
+      "Pickleball",
     ]);
     expect(SPORT_PANELS.map((panel) => panel.n)).toEqual([
       "01",
@@ -103,8 +105,10 @@ describe("the sports panels", () => {
       "05",
       "06",
       "07",
+      "08",
+      "09",
     ]);
-    expect(new Set(SPORT_PANELS.map((panel) => panel.id)).size).toBe(7);
+    expect(new Set(SPORT_PANELS.map((panel) => panel.id)).size).toBe(9);
   });
 
   it("invent no applications or technical information: none are set until SLORA supplies verified ones", () => {
@@ -131,7 +135,7 @@ describe("the sports panels", () => {
 
   it("give every panel a picture and a giant word of one or two lines", () => {
     for (const panel of SPORT_PANELS) {
-      expect(panel.image.src).toMatch(/^\/videos\/.+\.webp$/);
+      expect(panel.image.src).toMatch(/^\/images\/sports\/.+\.webp$/);
       expect([1, 2]).toContain(panel.word.length);
     }
   });

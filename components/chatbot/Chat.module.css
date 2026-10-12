@@ -304,6 +304,29 @@
   line-height: 1.5;
   color: rgb(245 245 243 / 0.55);
 }
+/* the main button of the closing message: solid gold (START AGAIN beside it stays the quieter one) */
+.whatsapp {
+  display: inline-block;
+  margin-top: 1.1rem;
+  padding: 0.85rem 1.3rem;
+  border: 1px solid var(--slora-gold);
+  border-radius: 999px;
+  background: var(--slora-gold);
+  font-family: var(--slora-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-decoration: none;
+  color: var(--slora-ink);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.whatsapp:hover {
+  transform: translateY(-2px);
+}
+.whatsapp:focus-visible {
+  outline: 2px solid var(--slora-paper);
+  outline-offset: 2px;
+}
 .again {
   margin-top: 1rem;
   padding: 0.7rem 1rem;

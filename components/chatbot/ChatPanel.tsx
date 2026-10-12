@@ -12,6 +12,8 @@ import {
 } from "@/lib/chat/flow";
 import { closeChat, useChatOpen, useInterest } from "@/lib/chat/store";
 import { getDraft, resetDraft, setAnswer, useDraft } from "@/lib/leads/draft";
+import { saveLeadQuietly } from "@/lib/leads/submitClient";
+import { buildWhatsAppUrl, type EnquiryDetails } from "@/lib/whatsapp/whatsapp";
 import styles from "./Chat.module.css";
 
 interface Message {
@@ -48,6 +50,9 @@ export default function ChatPanel() {
   const step = nextStep(draft);
   const answered = answeredCount(draft);
   const done = step === null;
+  // Once every question is answered the draft is a complete enquiry; this is what goes to WhatsApp.
+  const details = draft as EnquiryDetails;
+  const whatsappHref = done ? buildWhatsAppUrl(details) : null;
 
   const later = (fn: () => void, ms: number) => {
     timers.current.push(window.setTimeout(fn, ms));
@@ -74,24 +79,44 @@ export default function ChatPanel() {
   };
 
   // Start (or restart) the conversation every time the panel opens — not just the first
-  // time. The panel is downloaded once and then stays mounted for the rest of the visit
-  // (see ChatWidget), so a later open — from a different card, with a different interest
-  // — needs its own fresh greeting rather than silently reusing the first one.
+  // time, and always from the first unanswered question (the NAME, since closing wipes the
+  // draft, see below). The panel is downloaded once and then stays mounted for the rest of the
+  // visit (see ChatWidget), so a later open — from a different card, with a different interest —
+  // needs its own fresh greeting rather than silently reusing the first one.
+  // This must be safe to run twice in a row: React's development mode runs every effect, cleans
+  // it up and runs it again on mount. An earlier version skipped the second run (it only started
+  // on a closed→open change), which cleared its own timers and left the first open with no
+  // greeting and no first question.
   useEffect(() => {
-    if (open && !wasOpen.current) {
-      timers.current.forEach((t) => window.clearTimeout(t));
-      timers.current = [];
-      asking.current = false;
+    if (!open) return;
+    timers.current.forEach((t) => window.clearTimeout(t));
+    timers.current = [];
+    asking.current = false;
+    // (cleared from a timer, not in the effect body: the lint rule against synchronous setState
+    // in effects, and the same reason `askNext` works from a timer)
+    later(() => {
       setMessages([]);
       setTyping(false);
       setInput("");
-      later(() => push("bot", greeting), 150);
-      later(() => askNext(), 500);
-    }
-    wasOpen.current = open;
+    }, 0);
+    later(() => push("bot", greeting), 150);
+    later(() => askNext(), 500);
     const pending = timers.current;
     return () => pending.forEach((t) => window.clearTimeout(t));
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
+
+  // Closing ends the enquiry: the next time the chat opens it starts from the NAME again, and
+  // the previous visitor's answers are not left in memory for the next person on this computer.
+  // (A card or sport button that opens the chat pre-fills its requirement just BEFORE opening,
+  // after this has run, so that still works.)
+  useEffect(() => {
+    if (open) {
+      wasOpen.current = true;
+    } else if (wasOpen.current) {
+      wasOpen.current = false;
+      resetDraft();
+    }
   }, [open]);
 
   // Keep the newest message in view, and the cursor in the box.
@@ -192,7 +217,11 @@ export default function ChatPanel() {
         {done && !typing && (
           <div className={styles.summary}>
             <p className={styles.thanks}>THANK YOU.</p>
-            {CHAT_PREVIEW_MODE ? (
+            {whatsappHref ? (
+              <p className={styles.previewNote}>
+                ONE LAST STEP · PRESS <b>SEND</b> IN WHATSAPP TO DELIVER IT
+              </p>
+            ) : CHAT_PREVIEW_MODE ? (
               <p className={styles.previewNote}>
                 PREVIEW ONLY · YOUR DETAILS HAVE <b>NOT</b> BEEN SENT
               </p>
@@ -207,10 +236,23 @@ export default function ChatPanel() {
                 </div>
               ))}
             </dl>
+            {whatsappHref && (
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.whatsapp}
+                onClick={() => void saveLeadQuietly(details)}
+              >
+                SEND ON WHATSAPP →
+              </a>
+            )}
             <p className={styles.footnote}>
-              {CHAT_PREVIEW_MODE
-                ? "The enquiry system is not switched on yet — once it is, our team will contact you as soon as possible."
-                : "Our team will contact you as soon as possible."}
+              {whatsappHref
+                ? "This opens WhatsApp with your details already typed. SLORA receives them once you press Send there, and our team will contact you as soon as possible."
+                : CHAT_PREVIEW_MODE
+                  ? "The enquiry system is not switched on yet — once it is, our team will contact you as soon as possible."
+                  : "Our team will contact you as soon as possible."}
             </p>
             <button type="button" className={styles.again} onClick={startAgain}>
               START AGAIN
