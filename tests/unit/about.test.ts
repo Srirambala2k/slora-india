@@ -1,21 +1,17 @@
 import { describe, expect, it } from "vitest";
 import {
   ABOUT_PARAGRAPHS,
-  FOUNDED_YEAR,
   FOUNDER_NAME,
   FOUNDER_PHOTO,
   LEAD_LINE,
   PROJECTS_STAT,
-  SINCE,
 } from "@/data/about";
 
 const flatten = (runs: readonly { text: string }[]) => runs.map((r) => r.text).join("");
 
 describe("the founder story SLORA supplied", () => {
-  it("uses the name, tagline and year exactly as given", () => {
+  it("uses the name, tagline and project count exactly as given", () => {
     expect(FOUNDER_NAME).toBe("Lohith Raghuraman");
-    expect(FOUNDED_YEAR).toBe("2026");
-    expect(SINCE).toBe("Since 2026");
     expect(PROJECTS_STAT).toBe("100+");
     expect(LEAD_LINE).toBe("Every great space begins with a vision.");
   });

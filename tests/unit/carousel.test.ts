@@ -20,7 +20,7 @@ describe("giant word sizing", () => {
   });
 
   it("fits every CR-1 material card's giant word too (checked individually: these are new, easy to get wrong)", () => {
-    expect(wordScale(["Astro", "turf"])).toBeCloseTo(0.92, 2);
+    expect(wordScale(["Artificial", "turf"])).toBeCloseTo(0.46, 2);
     expect(wordScale(["Acrylic", "court"])).toBeCloseTo(0.66, 2);
     expect(wordScale(["Vinyl", "court"])).toBeCloseTo(0.84, 2);
     expect(wordScale(["Rubber", "track"])).toBeCloseTo(0.77, 2);
@@ -40,7 +40,8 @@ describe("giant word sizing", () => {
     expect(wordScale(["", ""])).toBe(1);
     for (const card of SURFACE_CARDS) {
       for (const scale of [wordScale(card.word), wordScaleNarrow(card.word)]) {
-        expect(scale).toBeGreaterThan(0.5);
+        // a readability floor: the longest word ("ARTIFICIAL", chosen by the client 2026-10-22) is about 0.38 on a phone
+        expect(scale).toBeGreaterThan(0.35);
         expect(scale).toBeLessThanOrEqual(1);
       }
     }

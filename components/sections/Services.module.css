@@ -190,19 +190,6 @@
   transform-origin: left;
   transform: scaleX(0);
 }
-.note {
-  margin: 0;
-  font-family: var(--slora-font-mono);
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  color: rgb(245 245 243 / 0.4);
-}
-.stage .note {
-  position: absolute;
-  z-index: 5;
-  left: var(--pad);
-  bottom: 1rem;
-}
 
 /* ── the stacked version: phones, no graphics card, reduced motion ───────────────────────── */
 .simple {

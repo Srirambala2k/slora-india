@@ -20,8 +20,6 @@ interface CardCarouselProps {
   cards: readonly SurfaceCard[];
   /** What the deck is called, for screen readers. */
   label: string;
-  /** Said on screen under the deck, e.g. that the pictures are stand-ins. */
-  note?: string;
 }
 
 /**
@@ -33,7 +31,7 @@ interface CardCarouselProps {
  * Every card is the full editorial card (all its hover effects intact); only the one in view can
  * be focused or read out (`inert` on the others).
  */
-export function CardCarousel({ cards, label, note }: CardCarouselProps) {
+export function CardCarousel({ cards, label }: CardCarouselProps) {
   const reduced = useReducedMotion();
   const count = cards.length;
   const [index, setIndex] = useState(0);
@@ -248,7 +246,6 @@ export function CardCarousel({ cards, label, note }: CardCarouselProps) {
             </li>
           ))}
         </ol>
-        {note && <p className={styles.note}>{note}</p>}
       </div>
 
       {/* tells screen readers which card is showing after each move */}

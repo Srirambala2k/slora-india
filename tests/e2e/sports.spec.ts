@@ -118,9 +118,7 @@ test.describe("sports: the pinned rail (desktop)", () => {
       .toBe(true);
   });
 
-  test("shows the nine categories in order, and says the pictures are stand-ins", async ({
-    page,
-  }) => {
+  test("shows the nine categories in order", async ({ page }) => {
     const section = await openPinned(page);
     await expect(section.getByRole("heading", { level: 3 })).toHaveCount(9);
     // (screen readers get the plain name, e.g. "Multi-sport", not the two stacked lines glued together)
@@ -131,7 +129,6 @@ test.describe("sports: the pinned rail (desktop)", () => {
       .getByRole("heading", { level: 3 })
       .evaluateAll((els) => els.map((el) => el.getAttribute("aria-label")));
     expect(order).toEqual(NAMES);
-    await expect(section.getByText(/ILLUSTRATIVE PICTURES/)).toBeAttached();
     // nothing is invented: no applications or technical details until SLORA supplies them
     await expect(section.getByText(/APPLICATIONS/i)).toHaveCount(0);
   });

@@ -170,14 +170,3 @@
   text-transform: uppercase;
   color: rgb(245 245 243 / 0.55);
 }
-.statDivider {
-  display: none;
-}
-@media (min-width: 900px) {
-  .statDivider {
-    display: block;
-    width: 2.5rem;
-    height: 1px;
-    background: var(--slora-line);
-  }
-}

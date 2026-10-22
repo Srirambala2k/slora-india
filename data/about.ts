@@ -7,8 +7,6 @@ import { stills } from "@/data/media";
  */
 export const FOUNDER_PHOTO = stills["lohith-raghuraman"];
 export const FOUNDER_NAME = "Lohith Raghuraman";
-export const FOUNDED_YEAR = "2026";
-export const SINCE = `Since ${FOUNDED_YEAR}`;
 export const LEAD_LINE = "Every great space begins with a vision.";
 /** The one other real number SLORA gave: "100+ previously executed projects". */
 export const PROJECTS_STAT = "100+";

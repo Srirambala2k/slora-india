@@ -23,7 +23,7 @@
   min-height: 25rem;
   /* CR-1 (2026-09-24): raised from 34rem — the new "played here" sports chips added a row to
      .body, which (being bottom-anchored) grew upward into the giant word on the largest-scale
-     words (Astro/turf, wordScale ~0.92). max-height is what actually governs a card's height at
+     words (Artificial/turf, wordScale ~0.46 now; it was Astro/turf, ~0.92). max-height is what actually governs a card's height at
      a typical desktop width (its aspect-ratio alone would make it taller); a few rem more here
      gives .body room to grow without the word needing to shrink to make space for it. */
   max-height: 39.5rem;
@@ -517,7 +517,7 @@
   .card {
     aspect-ratio: auto;
     /* CR-1 (2026-09-24): raised from 30rem for the same reason as the desktop max-height above
-       — the "played here" chips added a row to .body, which overlapped the giant word (Astro/
+       — the "played here" chips added a row to .body, which overlapped the giant word (Artificial/
        turf worst) at this height. `.card` has `overflow: hidden` and the word/body are both
        `position: absolute`, so unlike normal flow content they never push the card taller by
        themselves — it has to be told to be tall enough. */

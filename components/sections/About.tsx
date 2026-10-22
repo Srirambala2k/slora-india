@@ -1,13 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import {
-  ABOUT_PARAGRAPHS,
-  FOUNDED_YEAR,
-  LEAD_LINE,
-  PROJECTS_STAT,
-  type TextRun,
-} from "@/data/about";
+import { ABOUT_PARAGRAPHS, LEAD_LINE, PROJECTS_STAT, type TextRun } from "@/data/about";
 import { InstagramLink } from "@/components/contact/InstagramLink";
 import { INSTAGRAM_HANDLE, INSTAGRAM_URL } from "@/data/contact";
 import { contactLinks } from "@/lib/contact";
@@ -122,11 +116,6 @@ export function About() {
           <div className={styles.stat}>
             <p className={styles.statNumber}>{PROJECTS_STAT}</p>
             <p className={styles.statCaption}>Projects executed</p>
-          </div>
-          <span className={styles.statDivider} aria-hidden="true" />
-          <div className={styles.stat}>
-            <p className={styles.statNumber}>{FOUNDED_YEAR}</p>
-            <p className={styles.statCaption}>Founded</p>
           </div>
         </aside>
       </div>

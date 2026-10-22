@@ -22,13 +22,6 @@
   line-height: 0.95;
   letter-spacing: -0.04em;
 }
-.note {
-  margin: 0.5rem 0 0;
-  font-family: var(--slora-font-mono);
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  color: rgb(245 245 243 / 0.45);
-}
 
 .grid {
   list-style: none;

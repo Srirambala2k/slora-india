@@ -37,14 +37,6 @@
   line-height: 0.95;
   letter-spacing: -0.04em;
 }
-.note {
-  margin: 0;
-  max-width: 24rem;
-  font-family: var(--slora-font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  color: rgb(245 245 243 / 0.4);
-}
 
 .meter {
   display: flex;

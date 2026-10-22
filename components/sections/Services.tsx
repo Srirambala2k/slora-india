@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { SERVICES, SERVICES_NOTE } from "@/data/services";
+import { SERVICES } from "@/data/services";
 import { openChat } from "@/lib/chat/store";
 import { contactLinks } from "@/lib/contact";
 import { useCapability } from "@/lib/device/capability";
@@ -190,7 +190,6 @@ function ServiceStage({ pinned }: { pinned: boolean }) {
             </span>
           </div>
         )}
-        <p className={styles.note}>{SERVICES_NOTE}</p>
       </div>
     </section>
   );

@@ -45,5 +45,3 @@ export const SERVICES: readonly Service[] = [
     image: image("dusk-court"),
   },
 ] as const;
-
-export const SERVICES_NOTE = "ILLUSTRATIVE PICTURES · TO BE REPLACED WITH SLORA'S OWN";

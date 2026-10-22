@@ -131,7 +131,6 @@ test.describe("home: the scroll journey", () => {
       )
       .toEqual([1, 1, 1, 1, 1]);
 
-    await expect(page.getByText("ILLUSTRATIVE · NOT TO SCALE")).toBeVisible();
     // the menu knows we are still in "Surfaces"
     await expect(page.locator("nav a[aria-current='true']")).toContainText(/surfaces/i);
   });
@@ -358,7 +357,6 @@ test.describe("home: the scroll journey", () => {
     const layers = page.locator("#surfaces li");
     await expect(layers).toHaveCount(5);
     await expect(layers.first()).toContainText("GRASS FIBRES");
-    await expect(page.getByText("ILLUSTRATIVE · NOT TO SCALE")).toBeAttached();
     // and the page is only as tall as its content (no giant pinned section)
     const ratio = await page.evaluate(
       () => document.getElementById("top")!.getBoundingClientRect().height / window.innerHeight,

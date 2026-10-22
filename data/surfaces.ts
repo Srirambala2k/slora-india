@@ -70,7 +70,7 @@ export const SURFACE_CARDS: readonly SurfaceCard[] = [
     id: "artificial-turf",
     n: "01",
     label: "Artificial turf",
-    word: ["Astro", "turf"],
+    word: ["Artificial", "turf"],
     line: ["built for", "the game."],
     info: "ARTIFICIAL TURF · SPORTS SURFACES",
     href: "#sports",

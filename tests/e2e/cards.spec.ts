@@ -131,9 +131,8 @@ test.describe("surface cards: the arrow on the right", () => {
     }
   });
 
-  test("every card has its picture, and says the pictures are stand-ins", async ({ page }) => {
+  test("every card has its picture", async ({ page }) => {
     const deck = await openDeck(page);
-    await expect(deck.getByText(/ILLUSTRATIVE PICTURES/)).toBeVisible();
     // pictures of the waiting cards load once the deck is near, so a click never shows a blank card
     await expect
       .poll(

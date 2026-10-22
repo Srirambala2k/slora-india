@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useCallback } from "react";
-import { PROJECTS, PROJECTS_NOTE, projectById } from "@/data/projects";
+import { PROJECTS, projectById } from "@/data/projects";
 import { goToCrossLink, projectHash, useCrossLinkTarget } from "@/lib/links/crossLink";
 import styles from "./Projects.module.css";
 
@@ -67,8 +67,6 @@ export function Projects() {
           </li>
         ))}
       </ul>
-
-      <p className={styles.note}>{PROJECTS_NOTE}</p>
 
       {open && <ProjectDetail key={open.id} project={open} onClose={close} />}
     </section>

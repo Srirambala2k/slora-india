@@ -82,17 +82,6 @@
   pointer-events: none;
   background: radial-gradient(90% 90% at 50% 50%, rgb(0 0 0 / 0.25), rgb(0 0 0 / 0.85));
 }
-.note {
-  position: absolute;
-  right: var(--pad);
-  bottom: clamp(1.25rem, 4svh, 2.25rem);
-  margin: 0;
-  font-family: var(--slora-font-mono);
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  color: rgb(245 245 243 / 0.5);
-  opacity: 0;
-}
 
 /* ── headline ──────────────────────────────────────────────────────────── */
 .headline {
@@ -344,10 +333,6 @@
   .groundLineText,
   .statementText {
     font-size: 1.7rem;
-  }
-  .note {
-    right: auto;
-    left: var(--pad);
   }
   /* shorter, so "THE FIBRE" (its bottom-most label) sits well clear of the statement's own
      text above, instead of the two overlapping (both are in this corner on a narrow screen) */

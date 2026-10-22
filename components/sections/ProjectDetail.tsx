@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Project } from "@/data/projects";
-import { PROJECTS_NOTE } from "@/data/projects";
 import { openChat } from "@/lib/chat/store";
 import { useReducedMotion } from "@/lib/hooks/useMediaQuery";
 import { getLenis } from "@/lib/scroll/lenis";
@@ -165,7 +164,6 @@ export function ProjectDetail({ project, onClose }: { project: Project; onClose:
           <p className={styles.counter}>
             CLIP {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
           </p>
-          <p className={styles.note}>{PROJECTS_NOTE}</p>
 
           <button type="button" className={styles.enquire} onClick={() => openChat(project.name)}>
             Enquire about a project like this

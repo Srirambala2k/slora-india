@@ -110,6 +110,4 @@ export const PROJECTS: readonly Project[] = [
   },
 ] as const;
 
-export const PROJECTS_NOTE = "PROJECT NAMES AND DETAILS TO BE CONFIRMED BY SLORA";
-
 export const projectById = (id: string): Project | undefined => PROJECTS.find((p) => p.id === id);

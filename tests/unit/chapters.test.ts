@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BUILD_CHAPTERS, BUILD_FOOTAGE_SECONDS, BUILD_NOTE } from "@/data/howWeBuild";
+import { BUILD_CHAPTERS, BUILD_FOOTAGE_SECONDS } from "@/data/howWeBuild";
 import { chapterIndexAt, chapterProgress } from "@/lib/journey/chapters";
 
 describe("How we build chapters", () => {
@@ -21,10 +21,6 @@ describe("How we build chapters", () => {
 
   it("is numbered 01 to 07 in order", () => {
     expect(BUILD_CHAPTERS.map((c) => c.n)).toEqual(["01", "02", "03", "04", "05", "06", "07"]);
-  });
-
-  it("says out loud that the names still need SLORA's confirmation", () => {
-    expect(BUILD_NOTE).toMatch(/CONFIRMED BY SLORA/);
   });
 
   it("finds the chapter for any time, including the edges", () => {

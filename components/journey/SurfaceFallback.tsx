@@ -59,7 +59,6 @@ export function SurfaceFallback({ id = "surfaces" }: { id?: string }) {
           </li>
         ))}
       </ol>
-      <p className={styles.note}>ILLUSTRATIVE · NOT TO SCALE</p>
     </section>
   );
 }

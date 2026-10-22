@@ -29,5 +29,3 @@ export const BUILD_CHAPTERS: readonly BuildChapter[] = [
 ] as const;
 
 export const BUILD_FOOTAGE_SECONDS = 10;
-
-export const BUILD_NOTE = "ILLUSTRATIVE FOOTAGE · STAGE NAMES TO BE CONFIRMED BY SLORA";

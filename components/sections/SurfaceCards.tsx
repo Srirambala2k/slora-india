@@ -13,11 +13,7 @@ export function SurfaceCards() {
       <h2 id="surface-cards-h" className={styles.title}>
         surfaces for every game
       </h2>
-      <CardCarousel
-        cards={SURFACE_CARDS}
-        label="Surface cards"
-        note="ILLUSTRATIVE PICTURES · TO BE REPLACED WITH SLORA'S OWN PHOTOS"
-      />
+      <CardCarousel cards={SURFACE_CARDS} label="Surface cards" />
     </section>
   );
 }

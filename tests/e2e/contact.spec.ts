@@ -90,8 +90,7 @@ test.describe("About", () => {
     const stats = about.getByRole("complementary", { name: "SLORA in numbers" });
     await expect(stats.getByText("100+")).toBeVisible();
     await expect(stats.getByText("Projects executed")).toBeVisible();
-    await expect(stats.getByText("2026")).toBeVisible();
-    await expect(stats.getByText("Founded")).toBeVisible();
+    await expect(stats.getByText("Founded")).toHaveCount(0);
     await expect(about.locator("img")).toHaveCount(0);
   });
 

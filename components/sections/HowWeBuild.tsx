@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { VideoSlot } from "@/components/media/VideoSlot";
 import { WatermarkCover } from "@/components/media/WatermarkCover";
-import { BUILD_CHAPTERS, BUILD_FOOTAGE_SECONDS, BUILD_NOTE } from "@/data/howWeBuild";
+import { BUILD_CHAPTERS, BUILD_FOOTAGE_SECONDS } from "@/data/howWeBuild";
 import { videos } from "@/data/media";
 import { frameUrls } from "@/data/sequences";
 import { openChat } from "@/lib/chat/store";
@@ -200,7 +200,6 @@ function HowStage({ immersive, reduced }: { immersive: boolean; reduced: boolean
               </li>
             ))}
           </ol>
-          <p className={styles.note}>{BUILD_NOTE}</p>
         </div>
 
         {/* the round button also sits over the ✦ mark baked into the stand-in footage */}

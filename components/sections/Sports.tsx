@@ -24,7 +24,6 @@ import {
 import styles from "./Sports.module.css";
 
 const COUNT = SPORT_PANELS.length;
-const NOTE = "ILLUSTRATIVE PICTURES · WORDING TO BE CONFIRMED BY SLORA";
 
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
@@ -303,7 +302,6 @@ function SportsStage({ pinned, reduced }: { pinned: boolean; reduced: boolean })
               where every game is played
             </h2>
           </div>
-          <p className={styles.note}>{NOTE}</p>
         </header>
 
         <div ref={railRef} className={styles.rail}>

@@ -175,8 +175,7 @@
   padding-right: 0.25rem;
 }
 .eyebrow,
-.counter,
-.note {
+.counter {
   margin: 0;
   font-family: var(--slora-font-mono);
   font-size: 11px;
@@ -226,10 +225,6 @@
 }
 .counter {
   color: rgb(245 245 243 / 0.6);
-}
-.note {
-  font-size: 10px;
-  color: rgb(245 245 243 / 0.4);
 }
 .enquire {
   align-self: flex-start;

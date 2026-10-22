@@ -125,11 +125,3 @@
     ),
     #474b4b;
 }
-
-.note {
-  margin: 0.25rem 0 0;
-  font-family: var(--slora-font-mono);
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  color: rgb(245 245 243 / 0.45);
-}

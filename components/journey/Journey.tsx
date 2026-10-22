@@ -7,7 +7,6 @@ import { VideoSlot } from "@/components/media/VideoSlot";
 import { JourneyActions } from "@/components/journey/JourneyActions";
 import { ContactPopover } from "@/components/contact/ContactPopover";
 import { InstagramLink } from "@/components/contact/InstagramLink";
-import { LAYERS } from "@/data/turf";
 import { frameUrls } from "@/data/sequences";
 import { useCapability } from "@/lib/device/capability";
 import { gsap, ScrollTrigger, SplitText, useGSAP } from "@/lib/gsap";
@@ -18,7 +17,6 @@ import {
   gaugeOpacity,
   groundLineOpacity,
   headlineExit,
-  labelReveal,
   layerOpacities,
   ramp,
   statementOpacity,
@@ -183,7 +181,6 @@ function JourneyStage({ mode }: { mode: JourneyMode | null }) {
       const loop = q("[data-loop]")[0] as HTMLElement;
       const turfBox = q("[data-turf]")[0] as HTMLElement | undefined;
       const turfShade = q("[data-turf-shade]")[0] as HTMLElement | undefined;
-      const note = q("[data-note]")[0] as HTMLElement | undefined;
       const headline = q("[data-headline]")[0] as HTMLElement;
       const cue = q("[data-cue]")[0] as HTMLElement;
       const tagline = q("[data-tagline]")[0] as HTMLElement;
@@ -261,13 +258,12 @@ function JourneyStage({ mode }: { mode: JourneyMode | null }) {
         statement.style.visibility = so > 0.02 ? "visible" : "hidden";
         statement.style.transform = `translateY(${(1 - so) * 26}px)`;
 
-        if (turfBox && turfShade && note) {
+        if (turfBox && turfShade) {
           const turfQ = turfProgress(p, mode);
           turfProgressRef.current = turfQ;
           turfBox.style.opacity = String(o.turf);
           turfBox.style.visibility = o.turf > 0.01 ? "visible" : "hidden";
           turfShade.style.opacity = String(1 - ramp(turfQ, 0, 0.32));
-          note.style.opacity = String(labelReveal(turfQ, LAYERS.length - 1, LAYERS.length));
           const active = state.inView && p >= phases.turfActiveFrom;
           if (active !== state.wasActive) {
             state.wasActive = active;
@@ -332,9 +328,6 @@ function JourneyStage({ mode }: { mode: JourneyMode | null }) {
               <TurfCanvas progress={turfProgressRef} active={turfActive} />
             )}
             <div className={styles.turfShade} data-turf-shade aria-hidden="true" />
-            <p className={styles.note} data-note>
-              ILLUSTRATIVE · NOT TO SCALE
-            </p>
           </div>
         )}
 
