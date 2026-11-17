@@ -81,5 +81,5 @@ The descent and HOW WE BUILD are **still frames painted on a canvas** (`lib/medi
 
 - **Next.js 16 differs from older versions.** `AGENTS.md` points to the bundled docs in `node_modules/next/dist/docs/` — read the relevant guide before using an API.
 - TypeScript is pinned to 5.9 (typescript-eslint does not support TS 7 yet) and ESLint to 9 (what `eslint-config-next` 16 targets; ESLint 9 prints a support notice — revisit when Next's template moves to 10).
-- The site sends `noindex` until launch (`app/layout.tsx`). Flip it in Phase 4.
+- The site is indexable (`app/layout.tsx`, flipped 2026-11-17); only `/specimen` and `/api/` stay out of search engines.
 - Stand-in footage looks AI-generated and carries a small ✦ mark. It is tagged `illustrative` in `data/media.ts` and must not be presented as a specific SLORA project.

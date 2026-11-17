@@ -8,8 +8,7 @@ export const metadata: Metadata = {
   title: { default: "SLORA", template: "%s · SLORA" },
   description:
     "SLORA creates surfaces where people move, play and experience space — artificial turf and sports flooring.",
-  // Keep the site out of search engines until launch (flip this in Phase 4).
-  robots: { index: false, follow: false },
+  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
